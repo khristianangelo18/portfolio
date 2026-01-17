@@ -23,6 +23,17 @@ const styles = `
       opacity: 1;
     }
   }
+  /* NEW: Soft Stealth Transition (Right-Heavy) */
+  .bg-split-tone {
+    background: linear-gradient(
+      100deg, 
+      #09090b 0%,    /* Pure Black (Left) */
+      #0b0b0d 30%,   /* Very subtle lift */
+      #0f0f11 70%,   /* Transitioning... */
+      #161618 100%   /* Soft Charcoal Gray (Right) */
+    );
+    background-attachment: fixed;
+  }
   .animate-fade-in-up {
     animation: fadeInUp 0.6s ease-out forwards;
   }
@@ -32,7 +43,7 @@ const styles = `
 `;
 
 // Navbar Component
-function Navbar() {
+function Navbar({ setShowHeroAnimations }) {
   const handleScroll = (e, id) => {
     e.preventDefault();
     const element = document.getElementById(id);
@@ -51,14 +62,51 @@ function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-900/50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3 group cursor-pointer">
-          <div className="flex items-center bg-white text-black px-2 py-0.5 rounded-sm font-mono font-bold text-xs group-hover:bg-blue-600 group-hover:text-white transition-colors">
+        {/* Terminal Logo */}
+        <div 
+          onClick={() => {
+            // Only trigger if the user is NOT already at the top (threshold of 10px)
+            if (window.scrollY > 10) {
+              setShowHeroAnimations(false); 
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              
+              setTimeout(() => {
+                setShowHeroAnimations(true);
+              }, 700);
+            } else {
+              // If already at the top, just scroll to 0 (in case of slight offset) without resetting animation
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }}
+          className="flex items-center gap-3 group cursor-pointer"
+        >
+          <div className="flex items-center bg-white text-black px-2 py-0.5 rounded-sm font-mono font-bold text-xs group-hover:bg-zinc-200 transition-colors">
             <Terminal className="w-4 h-4 mr-1.5" />
             KAT // DEV-PM
           </div>
         </div>
         
         <div className="hidden md:flex items-center gap-10 text-[11px] font-mono uppercase tracking-[0.2em] text-zinc-400">
+          <a href="#" onClick={(e) => { e.preventDefault(); 
+              if (window.scrollY > 10) {
+                setShowHeroAnimations(false);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // Delay the re-trigger until the scroll is nearly finished
+                setTimeout(() => {
+                  setShowHeroAnimations(true);
+                }, 900);
+              } else {
+                // If already at the top, just scroll to 0 (to fix any sub-pixel offsets) 
+                // without blinking the animation
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }} 
+            className="hover:text-white transition-colors relative group"
+          >
+            Home
+            <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-white group-hover:w-full transition-all duration-300"></span>
+          </a>
           <a href="#about" onClick={(e) => handleScroll(e, 'about')} className="hover:text-white transition-colors relative group">
             About
             <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-blue-500 group-hover:w-full transition-all duration-300"></span>
@@ -368,7 +416,16 @@ export default function LandingPage() {
     <div className="bg-zinc-950 min-h-screen text-white overflow-hidden">
       {/* Inject custom styles */}
       <style>{styles}</style>
-      
+
+      {/* Background Layer - Soft Metallic Glow */}
+      <div className="fixed inset-0 z-0 pointer-events-none bg-split-tone">
+        {/* Very large, very subtle light coming from the right side */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,rgba(255,255,255,0.02)_0%,transparent_60%)]"></div>
+        
+        {/* Keep the noise very low to avoid looking "dirty" */}
+        <div className="absolute inset-0 opacity-[0.015] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+      </div>
+
       {/* Loading Screen */}
       {isLoading && (
         <div className="fixed inset-0 z-[100] bg-zinc-950 flex items-center justify-center">
@@ -415,54 +472,52 @@ export default function LandingPage() {
           }}
         />
 
-      <Navbar />
+      <Navbar setShowHeroAnimations={setShowHeroAnimations}/>
       
       <main className="relative max-w-7xl mx-auto px-6 pb-20">
         
         {/* Hero Section */}
-        <section className="flex flex-col items-start justify-center min-h-screen pt-20 relative">
-          <div className="space-y-8 max-w-4xl">
+        <section className="flex flex-col items-start justify-center min-h-[80vh] pt-44 pb-10 relative overflow-hidden">
+          <div className="space-y-6 max-w-4xl">
             <div className={`inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-sm backdrop-blur-sm ${showHeroAnimations ? 'animate-fade-in' : 'opacity-0'}`} style={{ animationDelay: '0s' }}>
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-              Available for new projects
+              Available for new projects/internships
             </div>
 
-            <div className="space-y-4">
-              <h1 className="text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-none">
-                <div className={`${showHeroAnimations ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: '0.1s' }}>
-                  <span className="bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
+            <div className="space-y-2">
+              <h1 className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-none">
+                <div className={`transition-all duration-1200 ease-out ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} 
+                    style={{ animationDelay: '0.1s' }}>
+                  <span className="bg-gradient-to-r from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
                     KHRISTIAN
                   </span>
                 </div>
-                <div className={`${showHeroAnimations ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: '0.2s' }}>
-                  <span className="bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+
+                <div className={`transition-all duration-1200 ease-out ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} 
+                    style={{ animationDelay: '0.2s' }}>
+                  <span className="bg-gradient-to-r from-zinc-100 via-zinc-400 to-zinc-600 bg-clip-text text-transparent">
                     ANGELO
                   </span>
                 </div>
               </h1>
               
-              <div className={`flex flex-wrap gap-3 ${showHeroAnimations ? 'animate-fade-in' : 'opacity-0'}`} style={{ animationDelay: '0.3s' }}>
+              <div className={`h-[42px] flex items-center transition-all duration-1200 ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ animationDelay: '0.3s' }}>
                 <span className="px-4 py-2 bg-zinc-900/80 border border-zinc-800 rounded-lg text-sm font-mono text-zinc-300 backdrop-blur-sm flex items-center gap-2">
                   {currentRole}
-                  <span className="inline-block w-[2px] h-4 bg-blue-500 animate-pulse"></span>
+                  <span className="inline-block w-[2px] h-4 bg-white animate-pulse"></span>
                 </span>
               </div>
             </div>
 
-            <p className={`text-xl md:text-2xl text-zinc-400 leading-relaxed max-w-3xl ${showHeroAnimations ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: '0.4s' }}>
+            <p className={`text-lg md:text-xl text-zinc-400 leading-relaxed max-w-2xl transition-all duration-1200 ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ animationDelay: '0.4s' }}>
               I craft <span className="text-white font-semibold">exceptional digital experiences</span> by 
               combining technical expertise with strategic thinking. Specializing in scalable frontend 
               architecture and seamless project execution.
             </p>
 
-            <div className={`flex flex-wrap gap-4 pt-4 ${showHeroAnimations ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: '0.5s' }}>
+            <div className={`flex flex-wrap gap-4 pt-4 transition-all duration-1200 ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ animationDelay: '0.5s' }}>
               <a 
                 href="#projects" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  const element = document.getElementById('projects');
-                  if (element) element.scrollIntoView({ behavior: 'smooth' });
-                }}
                 className="group relative px-8 py-4 bg-blue-600 hover:bg-blue-500 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 overflow-hidden cursor-pointer"
               >
                 <span className="relative z-10">Explore My Work</span>
@@ -472,7 +527,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className={`absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce transition-opacity duration-500 ${showHeroAnimations ? 'opacity-100' : 'opacity-0'}`} style={{ animationDelay: '0.6s' }}>
+          <div className={`absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce transition-opacity duration-500 ${showHeroAnimations ? 'opacity-100' : 'opacity-0'}`} style={{ animationDelay: '0.6s' }}>
             <span className="text-xs text-zinc-600 font-mono">SCROLL</span>
             <div className="w-[1px] h-12 bg-gradient-to-b from-zinc-600 to-transparent" />
           </div>
@@ -528,7 +583,18 @@ export default function LandingPage() {
                     onClick={(e) => {
                       e.preventDefault();
                       const element = document.getElementById('contact');
-                      if (element) element.scrollIntoView({ behavior: 'smooth' });
+                      if (element) {
+                        // Gagamit tayo ng Manual Scroll calculation para gayahin ang Navbar at Footer
+                        const elementPosition = element.offsetTop;
+                        
+                        // Naka-set sa 0 ang offset para maging pantay sa logic mo sa Navbar
+                        const offsetPosition = elementPosition - 0; 
+
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: 'smooth'
+                        });
+                      }
                     }}
                     className="px-8 py-4 border-2 border-zinc-700 hover:border-zinc-600 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 hover:bg-zinc-900/50 cursor-pointer"
                   >
@@ -541,18 +607,15 @@ export default function LandingPage() {
               {/* Right Side - Profile Picture */}
               <div className="flex items-center justify-center lg:justify-end">
                 <div className="relative group">
-                  {/* Animated gradient border */}
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 rounded-2xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-500"></div>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-zinc-400/10 via-white/10 to-zinc-600/10 rounded-2xl blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
                   
-                  {/* Image container */}
-                  <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-2xl overflow-hidden border-4 border-zinc-900">
+                  <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-2xl overflow-hidden border-2 border-zinc-800/50 bg-zinc-950">
                     <img 
                       src="/images/aboutme.png" 
-                      alt="Khristian Angelo Tiu" 
-                      className="w-full h-full object-cover transition-all duration-500"
+                      alt="Profile" 
+                      className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
                     />
-                    {/* Overlay gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-60"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-90"></div>
                   </div>
                 </div>
               </div>
@@ -576,7 +639,7 @@ export default function LandingPage() {
                 {education.map((edu, i) => (
                   <div key={i} className="bg-zinc-900/50 border border-zinc-800/50 rounded-xl p-6 hover:border-zinc-700 transition-all">
                     <h4 className="text-lg font-bold text-white mb-1">{edu.school}</h4>
-                    <p className="text-blue-400 text-sm mb-2">{edu.degree}</p>
+                    <p className="text-blue-400 text-sm mb-2 italic">{edu.degree}</p>
                     <p className="text-zinc-500 text-sm mb-3">{edu.year}</p>
                     {edu.achievement && (
                       <div className="flex items-start gap-2 mt-3 pt-3 border-t border-zinc-800">
@@ -741,7 +804,8 @@ export default function LandingPage() {
                   <h2 className="text-5xl md:text-6xl font-bold">
                     Let's Create
                     <br />
-                    <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+                    {/* NEW: Zinc Metallic Gradient instead of Rainbow */}
+                    <span className="bg-gradient-to-r from-zinc-100 via-zinc-400 to-zinc-600 bg-clip-text text-transparent">
                       Something Great
                     </span>
                   </h2>
@@ -838,7 +902,7 @@ export default function LandingPage() {
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="relative">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur-lg opacity-20"></div>
+                    <div className="absolute -inset-1 bg-gradient-to-b from-zinc-400/20 via-zinc-800/10 to-transparent rounded-2xl blur-2xl opacity-40 group-hover:opacity-100 transition-opacity duration-700"></div>
                     <div className="relative bg-zinc-900/90 backdrop-blur-sm border border-zinc-800 rounded-xl p-8 space-y-6">
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -902,12 +966,14 @@ export default function LandingPage() {
                       <button 
                         type="submit"
                         disabled={isSubmitting}
-                        className="group relative w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="group relative w-full px-8 py-4 bg-blue-600 hover:bg-blue-500 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <span className="relative z-10">
+                        <span className="relative z-10 text-white">
                           {isSubmitting ? 'Sending...' : 'Send Message'}
                         </span>
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform relative z-10" />
+
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </button>
                     </div>
                   </div>
@@ -947,15 +1013,96 @@ export default function LandingPage() {
             <div className="space-y-4">
               <h4 className="text-white font-semibold text-sm">Quick Links</h4>
               <div className="flex flex-col gap-3">
-                <a href="#about" onClick={(e) => { e.preventDefault(); document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-zinc-400 hover:text-white transition-colors text-sm relative group w-fit">
+                <a 
+                  href="#" 
+                  onClick={(e) => { 
+                    e.preventDefault(); 
+                    
+                    if (window.scrollY > 10) {
+                      setShowHeroAnimations(false); 
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      
+                      setTimeout(() => {
+                        setShowHeroAnimations(true);
+                      }, 900);
+                    } else {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                  }} 
+                  className="text-zinc-400 hover:text-white transition-colors text-sm relative group w-fit"
+                >
+                  Home
+                  <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-white group-hover:w-full transition-all duration-300"></span>
+                </a>
+                {/* ABOUT LINK */}
+                <a 
+                  href="#about" 
+                  onClick={(e) => { 
+                    e.preventDefault(); 
+                    const element = document.getElementById('about');
+                    if (element) {
+                      const offset = 80;
+                      const bodyRect = document.body.getBoundingClientRect().top;
+                      const elementRect = element.getBoundingClientRect().top;
+                      const elementPosition = elementRect - bodyRect;
+                      const offsetPosition = elementPosition - offset;
+
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                      });
+                    }
+                  }} 
+                  className="text-zinc-400 hover:text-white transition-colors text-sm relative group w-fit"
+                >
                   About
                   <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-blue-500 group-hover:w-full transition-all duration-300"></span>
                 </a>
-                <a href="#projects" onClick={(e) => { e.preventDefault(); document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-zinc-400 hover:text-white transition-colors text-sm relative group w-fit">
+
+                {/* PROJECTS LINK */}
+                <a 
+                  href="#projects" 
+                  onClick={(e) => { 
+                    e.preventDefault(); 
+                    const element = document.getElementById('projects');
+                    if (element) {
+                      const offset = 80;
+                      const bodyRect = document.body.getBoundingClientRect().top;
+                      const elementRect = element.getBoundingClientRect().top;
+                      const elementPosition = elementRect - bodyRect;
+                      const offsetPosition = elementPosition - offset;
+
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                      });
+                    }
+                  }} 
+                  className="text-zinc-400 hover:text-white transition-colors text-sm relative group w-fit"
+                >
                   Projects
                   <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-blue-500 group-hover:w-full transition-all duration-300"></span>
                 </a>
-                <a href="#contact" onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-zinc-400 hover:text-white transition-colors text-sm relative group w-fit">
+
+                {/* CONTACT LINK */}
+                <a 
+                  href="#contact" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const element = document.getElementById('contact');
+                    if (element) {
+                      const elementPosition = element.offsetTop;
+                      
+                      const offsetPosition = elementPosition - 0; 
+
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                      });
+                    }
+                  }} 
+                  className="text-zinc-400 hover:text-white transition-colors text-sm relative group w-fit"
+                >
                   Contact
                   <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-blue-500 group-hover:w-full transition-all duration-300"></span>
                 </a>
