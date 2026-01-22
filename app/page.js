@@ -1,7 +1,18 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { ArrowRight, Mail, Github, Linkedin, MapPin, GraduationCap, Award, Users, CheckCircle, AlertCircle, ExternalLink, Sparkles, Terminal, Facebook, Instagram } from 'lucide-react';
+
+// Define Zod Schema for validation
+const contactSchema = z.object({
+  name: z.string().min(2, "Name is required (min 2 chars)"),
+  email: z.string().email("Please enter a valid email address"),
+  subject: z.string().min(5, "Subject must be at least 5 characters"),
+  message: z.string().min(10, "Message must be at least 10 characters"),
+});
 
 // Add custom animations
 const styles = `
@@ -48,7 +59,7 @@ function Navbar({ setShowHeroAnimations }) {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
-      const navbarHeight = 0; // Approximate navbar height
+      const navbarHeight = 0;
       const elementPosition = element.offsetTop;
       const offsetPosition = elementPosition - navbarHeight;
 
@@ -62,19 +73,15 @@ function Navbar({ setShowHeroAnimations }) {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-900/50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Terminal Logo */}
         <div 
           onClick={() => {
-            // Only trigger if the user is NOT already at the top (threshold of 10px)
             if (window.scrollY > 10) {
               setShowHeroAnimations(false); 
               window.scrollTo({ top: 0, behavior: 'smooth' });
-              
               setTimeout(() => {
                 setShowHeroAnimations(true);
               }, 700);
             } else {
-              // If already at the top, just scroll to 0 (in case of slight offset) without resetting animation
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }
           }}
@@ -91,14 +98,10 @@ function Navbar({ setShowHeroAnimations }) {
               if (window.scrollY > 10) {
                 setShowHeroAnimations(false);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                
-                // Delay the re-trigger until the scroll is nearly finished
                 setTimeout(() => {
                   setShowHeroAnimations(true);
                 }, 900);
               } else {
-                // If already at the top, just scroll to 0 (to fix any sub-pixel offsets) 
-                // without blinking the animation
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }
             }} 
@@ -197,14 +200,17 @@ export default function LandingPage() {
   
   const roles = ['Software Engineer', 'Project Manager', 'Frontend Developer'];
   const sectionRefs = useRef({});
-  
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+
+  // React Hook Form initialization
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting }
+  } = useForm({
+    resolver: zodResolver(contactSchema),
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const [submitStatus, setSubmitStatus] = useState(null);
 
   useEffect(() => {
@@ -215,11 +221,9 @@ export default function LandingPage() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Loading screen effect
   useEffect(() => {
-    // Animate progress from 0 to 100
-    const duration = 2500; // 2.5 seconds
-    const interval = 20; // Update every 20ms
+    const duration = 2500;
+    const interval = 20;
     const steps = duration / interval;
     const increment = 100 / steps;
     let currentProgress = 0;
@@ -233,15 +237,13 @@ export default function LandingPage() {
       setLoadingProgress(Math.floor(currentProgress));
     }, interval);
 
-    // First hide loading screen
     const loadingTimer = setTimeout(() => {
       setIsLoading(false);
     }, 2500);
 
-    // Then trigger hero animations after loading is done
     const heroTimer = setTimeout(() => {
       setShowHeroAnimations(true);
-    }, 2600); // 100ms after loading screen disappears
+    }, 2600);
 
     return () => {
       clearInterval(progressTimer);
@@ -274,7 +276,6 @@ export default function LandingPage() {
     return () => clearTimeout(timer);
   }, [currentRole, isDeleting, roleIndex, roles]);
 
-  // Intersection Observer - only animate when scrolling DOWN
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -283,15 +284,11 @@ export default function LandingPage() {
         
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Always make section visible
             setVisibleSections((prev) => new Set([...prev, entry.target.id]));
-            
-            // Only mark as animated if scrolling down
             if (isScrollingDown) {
               setAnimatedSections((prev) => new Set([...prev, entry.target.id]));
             }
           } else {
-            // Remove from both sets when out of view
             setVisibleSections((prev) => {
               const newSet = new Set(prev);
               newSet.delete(entry.target.id);
@@ -317,17 +314,8 @@ export default function LandingPage() {
     return () => observer.disconnect();
   }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  // NEW onSubmit function for Hook Form
+  const onSubmit = async (data) => {
     setSubmitStatus(null);
 
     try {
@@ -336,26 +324,19 @@ export default function LandingPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
       });
-
-      const data = await response.json();
 
       if (response.ok) {
         setSubmitStatus('success');
-        setFormData({ name: '', email: '', subject: '', message: '' });
-        
-        setTimeout(() => {
-          setSubmitStatus(null);
-        }, 5000);
+        reset();
+        setTimeout(() => setSubmitStatus(null), 5000);
       } else {
         setSubmitStatus('error');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
       setSubmitStatus('error');
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -414,37 +395,27 @@ export default function LandingPage() {
 
   return (
     <div className="bg-zinc-950 min-h-screen text-white overflow-hidden">
-      {/* Inject custom styles */}
       <style>{styles}</style>
 
-      {/* Background Layer - Soft Metallic Glow */}
       <div className="fixed inset-0 z-0 pointer-events-none bg-split-tone">
-        {/* Very large, very subtle light coming from the right side */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,rgba(255,255,255,0.02)_0%,transparent_60%)]"></div>
-        
-        {/* Keep the noise very low to avoid looking "dirty" */}
         <div className="absolute inset-0 opacity-[0.015] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
       </div>
 
-      {/* Loading Screen */}
       {isLoading && (
         <div className="fixed inset-0 z-[100] bg-zinc-950 flex items-center justify-center">
-          {/* Minimalist Loading Content */}
           <div className="text-center space-y-8 w-full max-w-md px-8">
-            {/* Logo/Monogram */}
             <div className="relative inline-block">
               <div className="text-8xl font-black tracking-tighter">
                 <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
                   KAT
                 </span>
               </div>
-              {/* Underline animation */}
               <div className="h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 mt-2 rounded-full overflow-hidden">
                 <div className="h-full bg-white animate-pulse"></div>
               </div>
             </div>
             
-            {/* Loading Bar */}
             <div className="space-y-3">
               <div className="w-full h-2 bg-zinc-800 rounded-full overflow-hidden">
                 <div 
@@ -452,8 +423,6 @@ export default function LandingPage() {
                   style={{ width: `${loadingProgress}%` }}
                 ></div>
               </div>
-              
-              {/* Percentage */}
               <div className="flex items-center justify-between text-sm">
                 <span className="text-zinc-500 font-mono">Loading portfolio...</span>
                 <span className="text-blue-400 font-mono font-bold">{loadingProgress}%</span>
@@ -463,7 +432,6 @@ export default function LandingPage() {
         </div>
       )}
 
-      {/* Main Content - Only show when loading is done */}
       <div className={`transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
         <div 
           className="fixed inset-0 opacity-30 pointer-events-none transition-all duration-300"
@@ -476,7 +444,6 @@ export default function LandingPage() {
       
       <main className="relative max-w-7xl mx-auto px-6 pb-20">
         
-        {/* Hero Section */}
         <section className="flex flex-col items-start justify-center min-h-[80vh] pt-44 pb-10 relative overflow-hidden">
           <div className="space-y-6 max-w-4xl">
             <div className={`inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-sm backdrop-blur-sm ${showHeroAnimations ? 'animate-fade-in' : 'opacity-0'}`} style={{ animationDelay: '0s' }}>
@@ -533,7 +500,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* About Section */}
         <section 
           id="about" 
           ref={(el) => (sectionRefs.current['about'] = el)}
@@ -547,7 +513,6 @@ export default function LandingPage() {
         >
           <div className="space-y-16">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-              {/* Left Side - Text Content */}
               <div className="space-y-6">
                 <div className="space-y-4">
                   <h2 className="text-5xl md:text-6xl font-bold">
@@ -564,7 +529,6 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                {/* Action Buttons */}
                 <div className="flex flex-wrap gap-4 pt-4">
                   <a 
                     href="/resume.pdf"
@@ -584,12 +548,8 @@ export default function LandingPage() {
                       e.preventDefault();
                       const element = document.getElementById('contact');
                       if (element) {
-                        // Gagamit tayo ng Manual Scroll calculation para gayahin ang Navbar at Footer
                         const elementPosition = element.offsetTop;
-                        
-                        // Naka-set sa 0 ang offset para maging pantay sa logic mo sa Navbar
                         const offsetPosition = elementPosition - 0; 
-
                         window.scrollTo({
                           top: offsetPosition,
                           behavior: 'smooth'
@@ -604,7 +564,6 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Right Side - Profile Picture */}
               <div className="flex items-center justify-center lg:justify-end">
                 <div className="relative group">
                   <div className="absolute -inset-1 bg-gradient-to-r from-zinc-400/10 via-white/10 to-zinc-600/10 rounded-2xl blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
@@ -621,7 +580,6 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Education */}
             <div 
               className={`space-y-6 ${
                 animatedSections.has('about')
@@ -652,7 +610,6 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Skills - Redesigned */}
             <div 
               className={`space-y-6 ${
                 animatedSections.has('about')
@@ -708,7 +665,6 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Leadership */}
             <div 
               className={`space-y-6 ${
                 animatedSections.has('about')
@@ -740,7 +696,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Projects Section */}
         <section 
           id="projects" 
           ref={(el) => (sectionRefs.current['projects'] = el)}
@@ -784,7 +739,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Contact Section */}
         <section 
           id="contact" 
           ref={(el) => (sectionRefs.current['contact'] = el)}
@@ -804,7 +758,6 @@ export default function LandingPage() {
                   <h2 className="text-5xl md:text-6xl font-bold">
                     Let's Create
                     <br />
-                    {/* NEW: Zinc Metallic Gradient instead of Rainbow */}
                     <span className="bg-gradient-to-r from-zinc-100 via-zinc-400 to-zinc-600 bg-clip-text text-transparent">
                       Something Great
                     </span>
@@ -900,7 +853,7 @@ export default function LandingPage() {
                   )}
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                   <div className="relative">
                     <div className="absolute -inset-1 bg-gradient-to-b from-zinc-400/20 via-zinc-800/10 to-transparent rounded-2xl blur-2xl opacity-40 group-hover:opacity-100 transition-opacity duration-700"></div>
                     <div className="relative bg-zinc-900/90 backdrop-blur-sm border border-zinc-800 rounded-xl p-8 space-y-6">
@@ -909,58 +862,50 @@ export default function LandingPage() {
                         <div className="space-y-2">
                           <label className="text-zinc-400 text-sm font-medium">Your Name</label>
                           <input 
+                            {...register("name")}
                             type="text" 
-                            name="name"
-                            value={formData.name}
-                            onChange={handleInputChange}
                             placeholder="John Doe" 
-                            className="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-blue-500 transition-colors"
-                            required
+                            className={`w-full bg-zinc-800/50 border ${errors.name ? 'border-red-500' : 'border-zinc-700'} rounded-lg px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-blue-500 transition-colors`}
                             disabled={isSubmitting}
                           />
+                          {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
                         </div>
                         
                         <div className="space-y-2">
                           <label className="text-zinc-400 text-sm font-medium">Your Email</label>
                           <input 
+                            {...register("email")}
                             type="email" 
-                            name="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
                             placeholder="john@example.com" 
-                            className="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-blue-500 transition-colors"
-                            required
+                            className={`w-full bg-zinc-800/50 border ${errors.email ? 'border-red-500' : 'border-zinc-700'} rounded-lg px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-blue-500 transition-colors`}
                             disabled={isSubmitting}
                           />
+                          {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
                         </div>
                       </div>
 
                       <div className="space-y-2">
                         <label className="text-zinc-400 text-sm font-medium">Subject</label>
                         <input 
+                          {...register("subject")}
                           type="text" 
-                          name="subject"
-                          value={formData.subject}
-                          onChange={handleInputChange}
                           placeholder="Project Inquiry" 
-                          className="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-blue-500 transition-colors"
-                          required
+                          className={`w-full bg-zinc-800/50 border ${errors.subject ? 'border-red-500' : 'border-zinc-700'} rounded-lg px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-blue-500 transition-colors`}
                           disabled={isSubmitting}
                         />
+                        {errors.subject && <p className="text-red-500 text-xs mt-1">{errors.subject.message}</p>}
                       </div>
 
                       <div className="space-y-2">
                         <label className="text-zinc-400 text-sm font-medium">Message</label>
                         <textarea 
-                          name="message"
-                          value={formData.message}
-                          onChange={handleInputChange}
+                          {...register("message")}
                           placeholder="What is it..."
                           rows="6"
-                          className="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-blue-500 transition-colors resize-none"
-                          required
+                          className={`w-full bg-zinc-800/50 border ${errors.message ? 'border-red-500' : 'border-zinc-700'} rounded-lg px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-blue-500 transition-colors resize-none`}
                           disabled={isSubmitting}
                         ></textarea>
+                        {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message.message}</p>}
                       </div>
 
                       <button 
@@ -972,7 +917,6 @@ export default function LandingPage() {
                           {isSubmitting ? 'Sending...' : 'Send Message'}
                         </span>
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform relative z-10" />
-
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </button>
                     </div>
@@ -988,9 +932,7 @@ export default function LandingPage() {
 
       <footer className="relative border-t border-zinc-900">
         <div className="max-w-7xl mx-auto px-6 py-16">
-          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-            
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg overflow-hidden">
@@ -1017,11 +959,9 @@ export default function LandingPage() {
                   href="#" 
                   onClick={(e) => { 
                     e.preventDefault(); 
-                    
                     if (window.scrollY > 10) {
                       setShowHeroAnimations(false); 
                       window.scrollTo({ top: 0, behavior: 'smooth' });
-                      
                       setTimeout(() => {
                         setShowHeroAnimations(true);
                       }, 900);
@@ -1034,7 +974,6 @@ export default function LandingPage() {
                   Home
                   <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-white group-hover:w-full transition-all duration-300"></span>
                 </a>
-                {/* ABOUT LINK */}
                 <a 
                   href="#about" 
                   onClick={(e) => { 
@@ -1046,7 +985,6 @@ export default function LandingPage() {
                       const elementRect = element.getBoundingClientRect().top;
                       const elementPosition = elementRect - bodyRect;
                       const offsetPosition = elementPosition - offset;
-
                       window.scrollTo({
                         top: offsetPosition,
                         behavior: 'smooth'
@@ -1059,7 +997,6 @@ export default function LandingPage() {
                   <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-blue-500 group-hover:w-full transition-all duration-300"></span>
                 </a>
 
-                {/* PROJECTS LINK */}
                 <a 
                   href="#projects" 
                   onClick={(e) => { 
@@ -1071,7 +1008,6 @@ export default function LandingPage() {
                       const elementRect = element.getBoundingClientRect().top;
                       const elementPosition = elementRect - bodyRect;
                       const offsetPosition = elementPosition - offset;
-
                       window.scrollTo({
                         top: offsetPosition,
                         behavior: 'smooth'
@@ -1084,7 +1020,6 @@ export default function LandingPage() {
                   <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-blue-500 group-hover:w-full transition-all duration-300"></span>
                 </a>
 
-                {/* CONTACT LINK */}
                 <a 
                   href="#contact" 
                   onClick={(e) => {
@@ -1092,9 +1027,7 @@ export default function LandingPage() {
                     const element = document.getElementById('contact');
                     if (element) {
                       const elementPosition = element.offsetTop;
-                      
                       const offsetPosition = elementPosition - 0; 
-
                       window.scrollTo({
                         top: offsetPosition,
                         behavior: 'smooth'
@@ -1147,7 +1080,6 @@ export default function LandingPage() {
               </div>
               <p className="text-zinc-500 text-xs">Thank you for visiting! Let's build something amazing together.</p>
             </div>
-
           </div>
 
           <div className="pt-8 border-t border-zinc-900">
@@ -1161,7 +1093,6 @@ export default function LandingPage() {
               </p>
             </div>
           </div>
-
         </div>
       </footer>
       </div>
