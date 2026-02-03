@@ -5,6 +5,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { ArrowRight, Mail, Github, Linkedin, MapPin, GraduationCap, Award, Users, CheckCircle, AlertCircle, ExternalLink, Sparkles, Terminal, Facebook, Instagram } from 'lucide-react';
+import SplitText from "./SplitText";
+
+const handleAnimationComplete = () => {
+  console.log('All letters have animated!');
+};
 
 // Define Zod Schema for validation
 const contactSchema = z.object({
@@ -222,7 +227,7 @@ export default function LandingPage() {
   }, []);
 
   useEffect(() => {
-    const duration = 2500;
+    const duration = 4500;
     const interval = 20;
     const steps = duration / interval;
     const increment = 100 / steps;
@@ -239,11 +244,11 @@ export default function LandingPage() {
 
     const loadingTimer = setTimeout(() => {
       setIsLoading(false);
-    }, 2500);
+    }, 4500);
 
     const heroTimer = setTimeout(() => {
       setShowHeroAnimations(true);
-    }, 2600);
+    }, 4600);
 
     return () => {
       clearInterval(progressTimer);
@@ -403,32 +408,98 @@ export default function LandingPage() {
       </div>
 
       {isLoading && (
-        <div className="fixed inset-0 z-[100] bg-zinc-950 flex items-center justify-center">
-          <div className="text-center space-y-8 w-full max-w-md px-8">
-            <div className="relative inline-block">
-              <div className="text-8xl font-black tracking-tighter">
-                <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
-                  KAT
-                </span>
-              </div>
-              <div className="h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 mt-2 rounded-full overflow-hidden">
-                <div className="h-full bg-white animate-pulse"></div>
+        <div className="fixed inset-0 z-[100] bg-zinc-950 flex items-center justify-center overflow-hidden">
+          {/* Animated background gradient */}
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-cyan-500/20 animate-pulse"></div>
+          </div>
+
+          {/* Subtle grid pattern */}
+          <div className="absolute inset-0 opacity-[0.02]" style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '50px 50px'
+          }}></div>
+
+          <div className="relative text-center space-y-12 w-full max-w-5xl px-8">
+            {/* Main Title with SplitText Animation */}
+            <div className="relative flex flex-col items-center justify-center">
+              <div className="w-full text-center space-y-6">
+                <SplitText
+                  text="Welcome to My Portfolio!"
+                  className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white"
+                  delay={50}
+                  duration={1.25}
+                  ease="power3.out"
+                  splitType="chars"
+                  from={{ opacity: 0, y: 40 }}
+                  to={{ opacity: 1, y: 0 }}
+                  threshold={0.1}
+                  rootMargin="-100px"
+                  textAlign="center"
+                  onLetterAnimationComplete={handleAnimationComplete}
+                  showCallback
+                />
               </div>
             </div>
             
-            <div className="space-y-3">
-              <div className="w-full h-2 bg-zinc-800 rounded-full overflow-hidden">
+            {/* Loading Progress Section */}
+            <div className="space-y-4 max-w-xl mx-auto">
+              {/* Progress Bar */}
+              <div className="relative">
+                {/* Background track with subtle glow */}
+                <div className="w-full h-2.5 bg-zinc-900/80 rounded-full overflow-hidden border border-zinc-800/50 shadow-inner">
+                  {/* Animated progress bar - WHITE */}
+                  <div 
+                    className="h-full bg-white rounded-full transition-all duration-300 ease-out relative overflow-hidden shadow-lg shadow-white/20"
+                    style={{ width: `${loadingProgress}%` }}
+                  >
+                    {/* Shimmer effect on progress bar */}
+                    <div 
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-100 to-transparent opacity-60"
+                      style={{
+                        animation: 'shimmer 1.5s ease-in-out infinite',
+                      }}
+                    ></div>
+                  </div>
+                </div>
+                
+                {/* Glow effect under progress bar */}
                 <div 
-                  className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-full transition-all duration-200 ease-out"
+                  className="absolute -bottom-1 left-0 h-4 bg-white/20 blur-xl rounded-full transition-all duration-300"
                   style={{ width: `${loadingProgress}%` }}
                 ></div>
               </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-zinc-500 font-mono">Loading portfolio...</span>
-                <span className="text-blue-400 font-mono font-bold">{loadingProgress}%</span>
+
+              {/* Progress Text */}
+              <div className="flex items-center justify-between text-base">
+                <span className="text-zinc-400 font-mono tracking-wide">
+                  Initializing experience...
+                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-white font-mono font-bold text-lg tabular-nums">
+                    {loadingProgress}%
+                  </span>
+                  <div className="flex gap-1">
+                    <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" style={{ animationDelay: '0ms' }}></div>
+                    <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" style={{ animationDelay: '150ms' }}></div>
+                    <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" style={{ animationDelay: '300ms' }}></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+
+          {/* Add keyframe animation for shimmer */}
+          <style jsx>{`
+            @keyframes shimmer {
+              0% {
+                transform: translateX(-100%);
+              }
+              100% {
+                transform: translateX(100%);
+              }
+            }
+          `}</style>
         </div>
       )}
 
