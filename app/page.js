@@ -363,8 +363,8 @@ export default function LandingPage() {
   ];
 
   const skills = {
-    languages: ["JavaScript", "Python", "C++", "C#", "Java", "SQL", "HTML", "Kotlin"],
-    frameworks: ["Next.js", "React", "Node.js", "Kotlin"],
+    languages: ["JavaScript", "Python", "C++", "C#", "Java", "SQL", "HTML", "Kotlin", "PHP"],
+    frameworks: ["Next.js", "React", "Node.js"],
     tools: ["Git/GitHub", "Google Cloud", "VS Code", "Figma", "Supabase", "Android Studio", "Jira"]
   };
 
