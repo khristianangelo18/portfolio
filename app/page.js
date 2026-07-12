@@ -129,6 +129,21 @@ const styles = `
   .theme-light .hover\\:text-white:hover {
     color: #0f172a !important;
   }
+  .theme-light .skill-filter-bar .hover\\:bg-zinc-900:hover {
+    background-color: rgba(15, 23, 42, 0.08) !important;
+  }
+  .theme-light .skill-filter-bar .hover\\:text-white:hover {
+    color: #0f172a !important;
+  }
+  .theme-light .skill-category-active {
+    border-color: rgba(37, 99, 235, 0.45) !important;
+    background-color: rgba(37, 99, 235, 0.08) !important;
+  }
+  .theme-light .skill-filter-pill-active {
+    background-color: #0f172a !important;
+    color: #ffffff !important;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.18) !important;
+  }
   .theme-light .bg-clip-text.text-transparent {
     background-image: linear-gradient(90deg, #0f172a, #2563eb, #475569) !important;
   }
@@ -561,9 +576,9 @@ export default function LandingPage() {
   ];
 
   const skills = {
-    languages: ["JavaScript", "Python", "C++", "C#", "Java", "SQL", "HTML", "Kotlin", "PHP"],
+    languages: ["JavaScript", "Python", "C++", "C#", "Java", "SQL", "HTML5", "CSS3", "TailwindCSS", "XML", "Kotlin", "PHP"],
     frameworks: ["Next.js", "React", "Node.js"],
-    tools: ["Git/GitHub", "Google Cloud", "VS Code", "Figma", "Supabase", "Android Studio", "Jira"]
+    tools: ["Git/GitHub", "Google Cloud", "VS Code", "Figma", "Supabase", "Android Studio", "Postman", "PostgreSQL", "Vite", "Jira", "AGILE", "Scrum"]
   };
 
   const skillFilters = [
@@ -1056,7 +1071,7 @@ export default function LandingPage() {
                   <h3 className="theme-section-title text-2xl font-bold">Technical Skills</h3>
                   <p className="mt-2 text-sm text-zinc-500">Filter the stack by category to scan what matters first.</p>
                 </div>
-                <div className="flex flex-wrap gap-2 rounded-xl border border-zinc-800/70 bg-zinc-950/60 p-1.5">
+                <div className="skill-filter-bar flex flex-wrap gap-2 rounded-xl border border-zinc-800/70 bg-zinc-950/60 p-1.5">
                   {skillFilters.map((filter) => {
                     const Icon = filter.icon;
                     const isActive = activeSkillFilter === filter.id;
@@ -1065,9 +1080,9 @@ export default function LandingPage() {
                         key={filter.id}
                         type="button"
                         onClick={() => setActiveSkillFilter(filter.id)}
-                        className={`group flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-mono uppercase tracking-[0.12em] transition-all duration-300 ${
+                        className={`skill-filter-pill group flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-mono uppercase tracking-[0.12em] transition-all duration-300 ${
                           isActive
-                            ? 'bg-white text-zinc-950 shadow-lg shadow-white/10'
+                            ? 'skill-filter-pill-active bg-white text-zinc-950 shadow-lg shadow-white/10'
                             : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
                         }`}
                         aria-pressed={isActive}
@@ -1087,9 +1102,9 @@ export default function LandingPage() {
                       key={category}
                       type="button"
                       onClick={() => setActiveSkillFilter(category)}
-                      className={`rounded-lg border p-3 text-left transition-all duration-300 ${
+                      className={`skill-category-card rounded-lg border p-3 text-left transition-all duration-300 ${
                         activeSkillFilter === category
-                          ? 'border-white/40 bg-white/10'
+                          ? 'skill-category-active border-white/40 bg-white/10'
                           : 'border-zinc-800/70 bg-zinc-950/35 hover:border-zinc-700'
                       }`}
                     >
