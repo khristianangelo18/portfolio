@@ -895,7 +895,7 @@ export default function LandingPage() {
 
                 <div className="flex flex-wrap gap-4 pt-4">
                   <a 
-                    href="/resume.pdf"
+                    href="/Khristian_Angelo_Tiu_Resume.pdf"
                     download="Khristian_Angelo_Tiu_Resume.pdf"
                     className="group relative px-8 py-4 bg-blue-600 hover:bg-blue-500 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 overflow-hidden cursor-pointer"
                   >
