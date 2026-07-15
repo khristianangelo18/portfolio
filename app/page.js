@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { ArrowRight, Mail, Github, Linkedin, MapPin, GraduationCap, Award, Users, CheckCircle, AlertCircle, ExternalLink, Sparkles, Facebook, Instagram, Briefcase, Heart, Code2, Layers, Wrench, Filter, Sun, Moon } from 'lucide-react';
+import { ArrowRight, Mail, Github, Linkedin, MapPin, GraduationCap, Award, Users, CheckCircle, AlertCircle, ExternalLink, Sparkles, Facebook, Instagram, Briefcase, Heart, Code2, Layers, Wrench, Filter, Sun, Moon, Menu, X } from 'lucide-react';
 import SplitText from "./SplitText";
 
 const handleAnimationComplete = () => {
@@ -240,8 +240,11 @@ const styles = `
 
 // Navbar Component
 function Navbar({ setShowHeroAnimations, theme, toggleTheme }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const handleScroll = (e, id) => {
     e.preventDefault();
+    setMobileMenuOpen(false);
     const element = document.getElementById(id);
     if (element) {
       const navbarHeight = 0;
@@ -257,9 +260,10 @@ function Navbar({ setShowHeroAnimations, theme, toggleTheme }) {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-900/50">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
         <div 
           onClick={() => {
+            setMobileMenuOpen(false);
             if (window.scrollY > 10) {
               setShowHeroAnimations(false); 
               window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -310,23 +314,78 @@ function Navbar({ setShowHeroAnimations, theme, toggleTheme }) {
           </a>
         </div>
 
-        <div className="flex items-center gap-5 border-l border-zinc-800 pl-5">
+        <div className="flex items-center gap-3 sm:gap-5 md:border-l md:border-zinc-800 md:pl-5">
           <button
             type="button"
             onClick={toggleTheme}
-            className="light-theme-toggle group relative h-9 w-16 rounded-full border border-zinc-800 bg-zinc-900/70 p-1 transition-all duration-300 hover:border-blue-500/50"
+            className="light-theme-toggle group relative h-9 w-16 rounded-full border border-zinc-800 bg-zinc-900/70 p-1 transition-all duration-300 hover:border-blue-500/50 flex-shrink-0"
             aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           >
             <span className={`light-toggle-thumb absolute top-1 flex h-7 w-7 items-center justify-center rounded-full bg-white text-zinc-950 shadow-sm transition-all duration-300 ${theme === 'dark' ? 'left-1' : 'left-8'}`}>
               {theme === 'dark' ? <Moon className="w-3.5 h-3.5" /> : <Sun className="w-3.5 h-3.5 text-yellow-500" />}
             </span>
           </button>
-          <a href="https://github.com/khristianangelo18" target="_blank" className="text-zinc-500 hover:text-white transition-colors">
+          <a href="https://github.com/khristianangelo18" target="_blank" className="hidden md:inline-flex text-zinc-500 hover:text-white transition-colors">
             <Github className="w-4 h-4" />
           </a>
-          <a href="https://www.linkedin.com/in/khristian-angelo-tiu-878863312/" target="_blank" className="text-zinc-500 hover:text-white transition-colors">
+          <a href="https://www.linkedin.com/in/khristian-angelo-tiu-878863312/" target="_blank" className="hidden md:inline-flex text-zinc-500 hover:text-white transition-colors">
             <Linkedin className="w-4 h-4" />
           </a>
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((open) => !open)}
+            className="md:hidden text-zinc-400 hover:text-white transition-colors"
+            aria-label="Toggle menu"
+            aria-expanded={mobileMenuOpen}
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile dropdown menu */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-out border-t border-zinc-900/50 ${
+          mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 border-t-0'
+        }`}
+      >
+        <div className="px-6 py-6 flex flex-col gap-5 text-sm font-mono uppercase tracking-[0.2em] text-zinc-400">
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              setMobileMenuOpen(false);
+              if (window.scrollY > 10) {
+                setShowHeroAnimations(false);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                  setShowHeroAnimations(true);
+                }, 900);
+              } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
+            className="hover:text-white transition-colors"
+          >
+            Home
+          </a>
+          <a href="#about" onClick={(e) => handleScroll(e, 'about')} className="hover:text-white transition-colors">
+            About
+          </a>
+          <a href="#projects" onClick={(e) => handleScroll(e, 'projects')} className="hover:text-white transition-colors">
+            Projects
+          </a>
+          <a href="#contact" onClick={(e) => handleScroll(e, 'contact')} className="hover:text-white transition-colors">
+            Contact
+          </a>
+          <div className="flex items-center gap-5 pt-2 border-t border-zinc-900/50">
+            <a href="https://github.com/khristianangelo18" target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-white transition-colors">
+              <Github className="w-4 h-4" />
+            </a>
+            <a href="https://www.linkedin.com/in/khristian-angelo-tiu-878863312/" target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-white transition-colors">
+              <Linkedin className="w-4 h-4" />
+            </a>
+          </div>
         </div>
       </div>
     </nav>
@@ -381,15 +440,66 @@ function ProjectCard({ title, description, tags, link, gradient }) {
   );
 }
 
+// Reveal Component
+// Wraps content that fades/slides in whenever it's scrolled into view, and
+// fades back out when it scrolls out of view — so it replays every time you
+// scroll past it. Each instance watches only its own element (not a large
+// parent section) and uses a threshold of 0 so it doesn't need a big
+// fraction of a tall block to be on-screen at once.
+function Reveal({ children, className = '', delayMs = 0, durationMs = 1000, from = 'up', as = 'div', ...rest }) {
+  const [visible, setVisible] = useState(false);
+  const ref = useRef(null);
+  const Tag = as;
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    if (typeof IntersectionObserver === 'undefined') {
+      setVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setVisible(entry.isIntersecting);
+        });
+      },
+      { threshold: 0, rootMargin: '0px 0px -10% 0px' }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const hiddenTransform =
+    from === 'left' ? '-translate-x-10'
+    : from === 'right' ? 'translate-x-10'
+    : from === 'down' ? '-translate-y-10'
+    : 'translate-y-10';
+
+  return (
+    <Tag
+      ref={ref}
+      style={{
+        transitionDelay: visible ? `${delayMs}ms` : '0ms',
+        transitionDuration: `${durationMs}ms`
+      }}
+      className={`transition-all ${visible ? 'opacity-100 translate-y-0 translate-x-0' : `opacity-0 ${hiddenTransform}`} ${className}`}
+      {...rest}
+    >
+      {children}
+    </Tag>
+  );
+}
+
 // Main Landing Page
 export default function LandingPage() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentRole, setCurrentRole] = useState('');
   const [roleIndex, setRoleIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [visibleSections, setVisibleSections] = useState(new Set());
-  const [animatedSections, setAnimatedSections] = useState(new Set());
-  const lastScrollY = useRef(0);
   const [isLoading, setIsLoading] = useState(true);
   const [showHeroAnimations, setShowHeroAnimations] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -397,7 +507,6 @@ export default function LandingPage() {
   const [theme, setTheme] = useState('dark');
   
   const roles = ['Software Engineer', 'Project Manager', 'Full-stack Developer', 'Quality Assurance'];
-  const sectionRefs = useRef({});
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('portfolio-theme');
@@ -493,44 +602,6 @@ export default function LandingPage() {
 
     return () => clearTimeout(timer);
   }, [currentRole, isDeleting, roleIndex, roles]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const currentScrollY = window.scrollY;
-        const isScrollingDown = currentScrollY > lastScrollY.current;
-        
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleSections((prev) => new Set([...prev, entry.target.id]));
-            if (isScrollingDown) {
-              setAnimatedSections((prev) => new Set([...prev, entry.target.id]));
-            }
-          } else {
-            setVisibleSections((prev) => {
-              const newSet = new Set(prev);
-              newSet.delete(entry.target.id);
-              return newSet;
-            });
-            setAnimatedSections((prev) => {
-              const newSet = new Set(prev);
-              newSet.delete(entry.target.id);
-              return newSet;
-            });
-          }
-        });
-        
-        lastScrollY.current = currentScrollY;
-      },
-      { threshold: 0.15, rootMargin: '-80px' }
-    );
-
-    Object.values(sectionRefs.current).forEach((ref) => {
-      if (ref) observer.observe(ref);
-    });
-
-    return () => observer.disconnect();
-  }, []);
 
   // NEW onSubmit function for Hook Form
   const onSubmit = async (data) => {
@@ -730,7 +801,7 @@ export default function LandingPage() {
             backgroundSize: '50px 50px'
           }}></div>
 
-          <div className="relative text-center space-y-12 w-full max-w-5xl px-8">
+          <div className="relative text-center space-y-12 w-full max-w-5xl px-6 sm:px-8">
             {/* Main Title with SplitText Animation */}
             <div className="relative flex flex-col items-center justify-center">
               <div className="w-full text-center space-y-6">
@@ -781,7 +852,7 @@ export default function LandingPage() {
               </div>
 
               {/* Progress Text */}
-              <div className="flex items-center justify-between text-base">
+              <div className="flex flex-wrap items-center justify-between gap-2 text-sm sm:text-base">
                 <span className="text-zinc-400 font-mono tracking-wide">
                   Initializing experience...
                 </span>
@@ -823,9 +894,9 @@ export default function LandingPage() {
 
       <Navbar setShowHeroAnimations={setShowHeroAnimations} theme={theme} toggleTheme={toggleTheme}/>
       
-      <main className="relative max-w-7xl mx-auto px-6 pb-20">
+      <main className="relative max-w-7xl mx-auto px-4 sm:px-6 pb-20">
         
-        <section className="flex flex-col items-start justify-center min-h-[80vh] pt-44 pb-10 relative overflow-hidden">
+        <section className="flex flex-col items-start justify-center min-h-[80vh] pt-32 sm:pt-40 md:pt-44 pb-10 relative overflow-hidden">
           <div className="space-y-6 max-w-4xl">
             <div className={`inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-sm backdrop-blur-sm ${showHeroAnimations ? 'animate-fade-in' : 'opacity-0'}`} style={{ animationDelay: '0s' }}>
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
@@ -833,7 +904,7 @@ export default function LandingPage() {
             </div>
 
             <div className="space-y-2">
-              <h1 className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-none">
+              <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-none break-words">
                 <div className={`transition-all duration-1200 ease-out ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} 
                     style={{ animationDelay: '0.1s' }}>
                   <span className="bg-gradient-to-r from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
@@ -875,7 +946,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className={`absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce transition-opacity duration-500 ${showHeroAnimations ? 'opacity-100' : 'opacity-0'}`} style={{ animationDelay: '0.6s' }}>
+          <div className={`self-center mt-16 sm:mt-0 sm:absolute sm:bottom-4 sm:left-1/2 sm:-translate-x-1/2 flex flex-col items-center gap-2 animate-bounce transition-opacity duration-500 ${showHeroAnimations ? 'opacity-100' : 'opacity-0'}`} style={{ animationDelay: '0.6s' }}>
             <span className="text-xs text-zinc-600 font-mono">SCROLL</span>
             <div className="w-[1px] h-12 bg-gradient-to-b from-zinc-600 to-transparent" />
           </div>
@@ -883,20 +954,13 @@ export default function LandingPage() {
 
         <section 
           id="about" 
-          ref={(el) => (sectionRefs.current['about'] = el)}
-          className={`py-32 border-t border-zinc-900 ${
-            animatedSections.has('about')
-              ? 'opacity-100 translate-y-0 transition-all duration-1000' 
-              : visibleSections.has('about')
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-20'
-          }`}
+          className="py-32 border-t border-zinc-900"
         >
           <div className="space-y-16">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <Reveal className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
               <div className="space-y-6">
                 <div className="space-y-4">
-                  <h2 className="theme-section-title text-5xl md:text-6xl font-bold">
+                  <h2 className="theme-section-title text-4xl sm:text-5xl md:text-6xl font-bold">
                     About <span className="theme-heading-muted text-zinc-600">Me</span>
                   </h2>
                   <p className="text-zinc-400 text-lg leading-relaxed">
@@ -960,17 +1024,9 @@ export default function LandingPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </Reveal>
 
-            <div
-              className={`space-y-7 ${
-                animatedSections.has('about')
-                  ? 'opacity-100 translate-x-0 transition-all duration-1000 delay-200'
-                  : visibleSections.has('about')
-                  ? 'opacity-100 translate-x-0'
-                  : 'opacity-0 -translate-x-10'
-              }`}
-            >
+            <Reveal className="space-y-7" from="left" delayMs={100}>
               <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
                 <h3 className="theme-section-title text-2xl font-bold flex items-center gap-3">
                   <GraduationCap className="w-6 h-6 text-blue-500" />
@@ -1013,17 +1069,9 @@ export default function LandingPage() {
                   ))}
                 </div>
               </div>
-            </div>
+            </Reveal>
 
-            <div 
-              className={`space-y-6 ${
-                animatedSections.has('about')
-                  ? 'opacity-100 translate-x-0 transition-all duration-1000 delay-300' 
-                  : visibleSections.has('about')
-                  ? 'opacity-100 translate-x-0'
-                  : 'opacity-0 -translate-x-10'
-              }`}
-            >
+            <Reveal className="space-y-6" from="left" delayMs={100}>
               <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
                 <h3 className="theme-section-title text-2xl font-bold flex items-center gap-3">
                   <Briefcase className="w-6 h-6 text-blue-500" />
@@ -1055,17 +1103,9 @@ export default function LandingPage() {
                   </div>
                 ))}
               </div>
-            </div>
+            </Reveal>
 
-            <div 
-              className={`space-y-6 ${
-                animatedSections.has('about')
-                  ? 'opacity-100 translate-x-0 transition-all duration-1000 delay-500' 
-                  : visibleSections.has('about')
-                  ? 'opacity-100 translate-x-0'
-                  : 'opacity-0 translate-x-10'
-              }`}
-            >
+            <Reveal className="space-y-6" from="right" delayMs={100}>
               <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
                 <div>
                   <h3 className="theme-section-title text-2xl font-bold">Technical Skills</h3>
@@ -1132,17 +1172,9 @@ export default function LandingPage() {
                   ))}
                 </div>
               </div>
-            </div>
+            </Reveal>
 
-            <div 
-              className={`space-y-6 ${
-                animatedSections.has('about')
-                  ? 'opacity-100 translate-y-0 transition-all duration-1000 delay-700' 
-                  : visibleSections.has('about')
-                  ? 'opacity-100 translate-y-0'
-                  : 'opacity-0 translate-y-10'
-              }`}
-            >
+            <Reveal className="space-y-6">
               <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
                 <h3 className="theme-section-title text-2xl font-bold flex items-center gap-3">
                   <Users className="w-6 h-6 text-blue-500" />
@@ -1166,17 +1198,9 @@ export default function LandingPage() {
                   </div>
                 ))}
               </div>
-            </div>
+            </Reveal>
 
-            <div 
-              className={`space-y-6 ${
-                animatedSections.has('about')
-                  ? 'opacity-100 translate-y-0 transition-all duration-1000 delay-1000' 
-                  : visibleSections.has('about')
-                  ? 'opacity-100 translate-y-0'
-                  : 'opacity-0 translate-y-10'
-              }`}
-            >
+            <Reveal className="space-y-6">
               <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
                 <h3 className="theme-section-title text-2xl font-bold flex items-center gap-3">
                   <Heart className="w-6 h-6 text-blue-500" />
@@ -1206,48 +1230,33 @@ export default function LandingPage() {
                   </div>
                 ))}
               </div>
-            </div>
+            </Reveal>
           </div>
         </section>
 
         <section 
           id="projects" 
-          ref={(el) => (sectionRefs.current['projects'] = el)}
-          className={`py-32 border-t border-zinc-900 ${
-            animatedSections.has('projects')
-              ? 'opacity-100 translate-y-0 transition-all duration-1000' 
-              : visibleSections.has('projects')
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-20'
-          }`}
+          className="py-32 border-t border-zinc-900"
         >
           <div className="space-y-16">
-            <div className="space-y-4">
-              <h2 className="theme-section-title text-5xl md:text-6xl font-bold">
+            <Reveal className="space-y-4">
+              <h2 className="theme-section-title text-4xl sm:text-5xl md:text-6xl font-bold">
                 Featured <span className="theme-heading-muted text-zinc-600">Projects</span>
               </h2>
               <p className="text-zinc-400 text-lg max-w-2xl">
                 A selection of recent work showcasing my approach to building modern, scalable applications.
               </p>
-            </div>
+            </Reveal>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
               {myProjects.map((project, i) => (
-                <div 
+                <Reveal
                   key={project.title}
-                  className={`${
-                    animatedSections.has('projects')
-                      ? 'opacity-100 translate-y-0 transition-all duration-700'
-                      : visibleSections.has('projects')
-                      ? 'opacity-100 translate-y-0'
-                      : 'opacity-0 translate-y-10'
-                  }`}
-                  style={{ 
-                    transitionDelay: animatedSections.has('projects') ? `${i * 150}ms` : '0ms'
-                  }}
+                  durationMs={700}
+                  delayMs={i * 150}
                 >
                   <ProjectCard {...project} />
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -1255,21 +1264,14 @@ export default function LandingPage() {
 
         <section 
           id="contact" 
-          ref={(el) => (sectionRefs.current['contact'] = el)}
-          className={`pt-32 pb-12 border-t border-zinc-900 ${
-            animatedSections.has('contact')
-              ? 'opacity-100 translate-y-0 transition-all duration-1000' 
-              : visibleSections.has('contact')
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-20'
-          }`}
+          className="pt-32 pb-12 border-t border-zinc-900"
         >
-          <div className="max-w-6xl mx-auto">
+          <Reveal as="div" className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
               
               <div className="space-y-8">
                 <div className="space-y-4">
-                  <h2 className="theme-section-title text-5xl md:text-6xl font-bold">
+                  <h2 className="theme-section-title text-4xl sm:text-5xl md:text-6xl font-bold">
                     Let's Create
                     <br />
                     <span className="bg-gradient-to-r from-zinc-100 via-zinc-400 to-zinc-600 bg-clip-text text-transparent">
@@ -1439,7 +1441,7 @@ export default function LandingPage() {
               </div>
 
             </div>
-          </div>
+          </Reveal>
         </section>
 
       </main>
