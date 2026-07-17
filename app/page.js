@@ -240,6 +240,12 @@ const styles = `
   .theme-light .submit-btn-text {
     color: #ffffff !important;
   }
+  .theme-dark .invert-dark-logo {
+    filter: invert(1) brightness(2);
+  }
+  .theme-light .invert-dark-logo {
+    filter: none !important;
+  }
 `;
 
 // Navbar Component
@@ -653,34 +659,28 @@ export default function LandingPage() {
   const skills = {
     languages: ["JavaScript", "Python", "C++", "C#", "Java", "SQL", "HTML5", "CSS3", "XML", "Kotlin", "PHP"],
     frameworks: ["Next.js", "React", "Node.js", "TailwindCSS"],
-    tools: ["Git/GitHub", "Google Cloud", "VS Code", "Figma", "Supabase", "Android Studio", "Postman", "PostgreSQL", "Vite", "Jira", "AGILE", "Scrum", "Vercel"]
+    tools: ["GitHub", "Google Cloud", "VS Code", "Figma", "Supabase", "Android Studio", "Postman", "PostgreSQL", "Vite", "Jira", "AGILE", "Scrum", "Vercel"]
   };
 
-  // Logo source for each skill. Most come from Simple Icons
-  // (cdn.simpleicons.org), rendered in each brand's true color. C# and Java
-  // are sourced from Devicon instead — Simple Icons explicitly excludes both
-  // for trademark reasons (they're owned by Microsoft and Oracle
-  // respectively), so those two never had a real logo available there.
-  // A handful of skills (SQL, XML, AGILE, Scrum) don't have one clear
-  // canonical logo, so those fall back to a monogram badge — the same
-  // fallback also kicks in automatically if any logo URL fails to load.
   const skillIcons = {
     "JavaScript": { source: 'simple', slug: 'javascript' },
     "Python": { source: 'simple', slug: 'python' },
     "C++": { source: 'simple', slug: 'cplusplus' },
     "C#": { source: 'devicon', slug: 'csharp' },
     "Java": { source: 'devicon', slug: 'java' },
+    "SQL": { source: 'devicon', slug: 'mysql' },
     "HTML5": { source: 'simple', slug: 'html5' },
     "CSS3": { source: 'simple', slug: 'css' },
+    "XML": { source: 'devicon', slug: 'xml' },
     "Kotlin": { source: 'simple', slug: 'kotlin' },
     "PHP": { source: 'simple', slug: 'php' },
-    "Next.js": { source: 'simple', slug: 'nextdotjs' },
+    "Next.js": { source: 'simple', slug: 'nextdotjs', invertInDarkMode: true },
     "React": { source: 'simple', slug: 'react' },
     "Node.js": { source: 'simple', slug: 'nodedotjs' },
     "TailwindCSS": { source: 'simple', slug: 'tailwindcss' },
-    "Git/GitHub": { source: 'simple', slug: 'github' },
+    "GitHub": { source: 'simple', slug: 'github', invertInDarkMode: true },
     "Google Cloud": { source: 'simple', slug: 'googlecloud' },
-    "VS Code": { source: 'simple', slug: 'visualstudiocode' },
+    "VS Code": { source: 'devicon', slug: 'vscode' },
     "Figma": { source: 'simple', slug: 'figma' },
     "Supabase": { source: 'simple', slug: 'supabase' },
     "Android Studio": { source: 'simple', slug: 'androidstudio' },
@@ -688,13 +688,16 @@ export default function LandingPage() {
     "PostgreSQL": { source: 'simple', slug: 'postgresql' },
     "Vite": { source: 'simple', slug: 'vite' },
     "Jira": { source: 'simple', slug: 'jira' },
-    "Vercel": { source: 'simple', slug: 'vercel' }
+    "Scrum": { source: 'local', slug: 'scrum', invertInDarkMode: true },
+    "AGILE": { source: 'local', slug: 'agile', invertInDarkMode: true },
+    "Vercel": { source: 'simple', slug: 'vercel', invertInDarkMode: true }
   };
 
-  const getSkillIconUrl = ({ source, slug }) =>
-    source === 'devicon'
-      ? `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${slug}/${slug}-original.svg`
-      : `https://cdn.simpleicons.org/${slug}`;
+  const getSkillIconUrl = ({ source, slug }) => {
+    if (source === 'local') return `/images/${slug}.png`;
+    if (source === 'devicon') return `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${slug}/${slug}-original.svg`;
+    return `https://cdn.simpleicons.org/${slug}`;
+  };
 
   const getSkillInitials = (name) => {
     const clean = name.replace(/[^a-zA-Z0-9 ]/g, ' ').trim();
@@ -952,7 +955,7 @@ export default function LandingPage() {
           <div className="space-y-6 max-w-4xl">
             <div className={`inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-sm backdrop-blur-sm ${showHeroAnimations ? 'animate-fade-in' : 'opacity-0'}`} style={{ animationDelay: '0s' }}>
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-              Available for new projects/internships
+              Available for new projects/internships/work opportunities. Let's connect!
             </div>
 
             <div className="space-y-2">
@@ -1009,22 +1012,40 @@ export default function LandingPage() {
           className="py-32 border-t border-zinc-900"
         >
           <div className="space-y-16">
+            <div className="space-y-4">
+              <h2 className="theme-section-title text-4xl sm:text-5xl md:text-6xl font-bold">
+                About <span className="theme-heading-muted text-zinc-600">Me</span>
+              </h2>
+            </div>
             <Reveal className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-              <div className="space-y-6">
-                <div className="space-y-4">
-                  <h2 className="theme-section-title text-4xl sm:text-5xl md:text-6xl font-bold">
-                    About <span className="theme-heading-muted text-zinc-600">Me</span>
-                  </h2>
-                  <p className="text-zinc-400 text-lg leading-relaxed">
-                    Results-driven Information Technology graduate with a strong focus on Frontend Development and 
-                    Project Management. Skilled in translating business requirements into actionable technical specifications, 
-                    building AI-powered applications, and delivering production-ready interfaces — with hands-on experience 
-                    across the full product lifecycle, from stakeholder alignment to Agile-driven delivery.
-                  </p>
-                  <div className="flex items-center gap-2 text-zinc-500 text-sm">
-                    <MapPin className="w-4 h-4" />
-                    <span>Manila, Philippines</span>
+      
+              {/* IMAGE CONTAINER: First on mobile (order-1), second on desktop (lg:order-2) */}
+              <div className="flex items-center justify-center lg:justify-end order-1 lg:order-2">
+                <div className="relative group">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-zinc-400/10 via-white/10 to-zinc-600/10 rounded-2xl blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
+                  
+                  <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-2xl overflow-hidden border-2 border-zinc-800/50 bg-zinc-950">
+                    <img 
+                      src="/images/aboutme.jpg" 
+                      alt="Profile" 
+                      className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-90"></div>
                   </div>
+                </div>
+              </div>
+
+              {/* BIO & BUTTONS CONTAINER: Second on mobile (order-2), first on desktop (lg:order-1) */}
+              <div className="space-y-6 order-2 lg:order-1">
+                <p className="text-zinc-400 text-lg leading-relaxed">
+                  Results-driven Information Technology graduate with a strong focus on Frontend Development and 
+                  Project Management. Skilled in translating business requirements into actionable technical specifications, 
+                  building AI-powered applications, and delivering production-ready interfaces — with hands-on experience 
+                  across the full product lifecycle, from stakeholder alignment to Agile-driven delivery.
+                </p>
+                <div className="flex items-center gap-2 text-zinc-500 text-sm">
+                  <MapPin className="w-4 h-4" />
+                  <span>Manila, Philippines</span>
                 </div>
 
                 <div className="flex flex-wrap gap-4 pt-4">
@@ -1042,18 +1063,6 @@ export default function LandingPage() {
                   
                   <a 
                     href="#contact" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const element = document.getElementById('contact');
-                      if (element) {
-                        const elementPosition = element.offsetTop;
-                        const offsetPosition = elementPosition - 0; 
-                        window.scrollTo({
-                          top: offsetPosition,
-                          behavior: 'smooth'
-                        });
-                      }
-                    }}
                     className="theme-outline-button px-8 py-4 border-2 border-zinc-700 hover:border-zinc-600 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 hover:bg-zinc-900/50 cursor-pointer"
                   >
                     <Mail className="w-5 h-5" />
@@ -1062,20 +1071,6 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-center lg:justify-end">
-                <div className="relative group">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-zinc-400/10 via-white/10 to-zinc-600/10 rounded-2xl blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
-                  
-                  <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-2xl overflow-hidden border-2 border-zinc-800/50 bg-zinc-950">
-                    <img 
-                      src="/images/aboutme.jpg" 
-                      alt="Profile" 
-                      className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-90"></div>
-                  </div>
-                </div>
-              </div>
             </Reveal>
 
             <Reveal className="space-y-7" from="left" delayMs={100}>
@@ -1217,13 +1212,16 @@ export default function LandingPage() {
                         <div className={`absolute inset-0 opacity-0 transition-opacity duration-300 ${skillTheme[skill.category].glow}`}></div>
                         <div className="relative flex items-start justify-between gap-3">
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className="skill-icon-chip relative w-9 h-9 flex-shrink-0 rounded-md bg-white border border-zinc-200/70 shadow-sm flex items-center justify-center overflow-hidden">
+                            <div className="skill-icon-chip relative w-9 h-9 flex-shrink-0 rounded-md bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 shadow-sm flex items-center justify-center overflow-hidden">
                               {icon && (
                                 <img
                                   src={getSkillIconUrl(icon)}
                                   alt=""
                                   loading="lazy"
-                                  className="w-5 h-5 object-contain"
+                                  // Replace 'dark:invert' with our new custom dynamic class:
+                                  className={`w-5 h-5 object-contain transition-all duration-300 ${
+                                    icon.invertInDarkMode ? 'invert-dark-logo' : ''
+                                  }`}
                                   onError={(e) => {
                                     e.currentTarget.style.display = 'none';
                                     const fallback = e.currentTarget.nextElementSibling;
@@ -1232,7 +1230,7 @@ export default function LandingPage() {
                                 />
                               )}
                               <span
-                                className="items-center justify-center text-[9px] font-bold text-zinc-700 leading-none"
+                                className="items-center justify-center text-[9px] font-bold text-zinc-700 dark:text-zinc-300 leading-none"
                                 style={{ display: icon ? 'none' : 'flex' }}
                               >
                                 {getSkillInitials(skill.name)}
