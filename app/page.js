@@ -147,6 +147,10 @@ const styles = `
   .theme-light .bg-clip-text.text-transparent {
     background-image: linear-gradient(90deg, #0f172a, #2563eb, #475569) !important;
   }
+  .theme-light .skill-icon-chip {
+    background-color: #f1f5f9 !important;
+    border-color: rgba(15, 23, 42, 0.12) !important;
+  }
   .theme-light input,
   .theme-light textarea {
     background-color: rgba(255, 255, 255, 0.96) !important;
@@ -647,9 +651,57 @@ export default function LandingPage() {
   ];
 
   const skills = {
-    languages: ["JavaScript", "Python", "C++", "C#", "Java", "SQL", "HTML5", "CSS3", "TailwindCSS", "XML", "Kotlin", "PHP"],
-    frameworks: ["Next.js", "React", "Node.js"],
-    tools: ["Git/GitHub", "Google Cloud", "VS Code", "Figma", "Supabase", "Android Studio", "Postman", "PostgreSQL", "Vite", "Jira", "AGILE", "Scrum"]
+    languages: ["JavaScript", "Python", "C++", "C#", "Java", "SQL", "HTML5", "CSS3", "XML", "Kotlin", "PHP"],
+    frameworks: ["Next.js", "React", "Node.js", "TailwindCSS"],
+    tools: ["Git/GitHub", "Google Cloud", "VS Code", "Figma", "Supabase", "Android Studio", "Postman", "PostgreSQL", "Vite", "Jira", "AGILE", "Scrum", "Vercel"]
+  };
+
+  // Logo source for each skill. Most come from Simple Icons
+  // (cdn.simpleicons.org), rendered in each brand's true color. C# and Java
+  // are sourced from Devicon instead — Simple Icons explicitly excludes both
+  // for trademark reasons (they're owned by Microsoft and Oracle
+  // respectively), so those two never had a real logo available there.
+  // A handful of skills (SQL, XML, AGILE, Scrum) don't have one clear
+  // canonical logo, so those fall back to a monogram badge — the same
+  // fallback also kicks in automatically if any logo URL fails to load.
+  const skillIcons = {
+    "JavaScript": { source: 'simple', slug: 'javascript' },
+    "Python": { source: 'simple', slug: 'python' },
+    "C++": { source: 'simple', slug: 'cplusplus' },
+    "C#": { source: 'devicon', slug: 'csharp' },
+    "Java": { source: 'devicon', slug: 'java' },
+    "HTML5": { source: 'simple', slug: 'html5' },
+    "CSS3": { source: 'simple', slug: 'css' },
+    "Kotlin": { source: 'simple', slug: 'kotlin' },
+    "PHP": { source: 'simple', slug: 'php' },
+    "Next.js": { source: 'simple', slug: 'nextdotjs' },
+    "React": { source: 'simple', slug: 'react' },
+    "Node.js": { source: 'simple', slug: 'nodedotjs' },
+    "TailwindCSS": { source: 'simple', slug: 'tailwindcss' },
+    "Git/GitHub": { source: 'simple', slug: 'github' },
+    "Google Cloud": { source: 'simple', slug: 'googlecloud' },
+    "VS Code": { source: 'simple', slug: 'visualstudiocode' },
+    "Figma": { source: 'simple', slug: 'figma' },
+    "Supabase": { source: 'simple', slug: 'supabase' },
+    "Android Studio": { source: 'simple', slug: 'androidstudio' },
+    "Postman": { source: 'simple', slug: 'postman' },
+    "PostgreSQL": { source: 'simple', slug: 'postgresql' },
+    "Vite": { source: 'simple', slug: 'vite' },
+    "Jira": { source: 'simple', slug: 'jira' },
+    "Vercel": { source: 'simple', slug: 'vercel' }
+  };
+
+  const getSkillIconUrl = ({ source, slug }) =>
+    source === 'devicon'
+      ? `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${slug}/${slug}-original.svg`
+      : `https://cdn.simpleicons.org/${slug}`;
+
+  const getSkillInitials = (name) => {
+    const clean = name.replace(/[^a-zA-Z0-9 ]/g, ' ').trim();
+    if (clean.length <= 4) return clean.toUpperCase();
+    const words = clean.split(/\s+/);
+    if (words.length > 1) return words.map((w) => w[0]).join('').slice(0, 3).toUpperCase();
+    return clean.slice(0, 3).toUpperCase();
   };
 
   const skillFilters = [
@@ -1155,21 +1207,47 @@ export default function LandingPage() {
                   ))}
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                  {visibleSkills.map((skill) => (
-                    <div
-                      key={`${skill.category}-${skill.name}`}
-                      className={`group relative overflow-hidden rounded-lg border border-zinc-800/70 bg-zinc-950/45 p-4 transition-all duration-300 hover:-translate-y-1 ${skillTheme[skill.category].border}`}
-                    >
-                      <div className={`absolute inset-0 opacity-0 transition-opacity duration-300 ${skillTheme[skill.category].glow}`}></div>
-                      <div className="relative flex items-start justify-between gap-3">
-                        <div>
-                          <p className="text-sm font-semibold text-white">{skill.name}</p>
-                          <p className="mt-1 text-[10px] font-mono uppercase tracking-[0.16em] text-zinc-500">{skillTheme[skill.category].label}</p>
+                  {visibleSkills.map((skill) => {
+                    const icon = skillIcons[skill.name];
+                    return (
+                      <div
+                        key={`${skill.category}-${skill.name}`}
+                        className={`group relative overflow-hidden rounded-lg border border-zinc-800/70 bg-zinc-950/45 p-4 transition-all duration-300 hover:-translate-y-1 ${skillTheme[skill.category].border}`}
+                      >
+                        <div className={`absolute inset-0 opacity-0 transition-opacity duration-300 ${skillTheme[skill.category].glow}`}></div>
+                        <div className="relative flex items-start justify-between gap-3">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="skill-icon-chip relative w-9 h-9 flex-shrink-0 rounded-md bg-white border border-zinc-200/70 shadow-sm flex items-center justify-center overflow-hidden">
+                              {icon && (
+                                <img
+                                  src={getSkillIconUrl(icon)}
+                                  alt=""
+                                  loading="lazy"
+                                  className="w-5 h-5 object-contain"
+                                  onError={(e) => {
+                                    e.currentTarget.style.display = 'none';
+                                    const fallback = e.currentTarget.nextElementSibling;
+                                    if (fallback) fallback.style.display = 'flex';
+                                  }}
+                                />
+                              )}
+                              <span
+                                className="items-center justify-center text-[9px] font-bold text-zinc-700 leading-none"
+                                style={{ display: icon ? 'none' : 'flex' }}
+                              >
+                                {getSkillInitials(skill.name)}
+                              </span>
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-sm font-semibold text-white truncate">{skill.name}</p>
+                              <p className="mt-1 text-[10px] font-mono uppercase tracking-[0.16em] text-zinc-500">{skillTheme[skill.category].label}</p>
+                            </div>
+                          </div>
+                          <span className={`mt-1 h-2 w-2 flex-shrink-0 rounded-full ${skillTheme[skill.category].dot}`}></span>
                         </div>
-                        <span className={`mt-1 h-2 w-2 rounded-full ${skillTheme[skill.category].dot}`}></span>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </Reveal>
@@ -1380,7 +1458,7 @@ export default function LandingPage() {
                           <input 
                             {...register("name")}
                             type="text" 
-                            placeholder="John Doe" 
+                            placeholder="Your Name" 
                             className={`w-full bg-zinc-800/50 border ${errors.name ? 'border-red-500' : 'border-zinc-700'} rounded-lg px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-blue-500 transition-colors`}
                             disabled={isSubmitting}
                           />
@@ -1392,7 +1470,7 @@ export default function LandingPage() {
                           <input 
                             {...register("email")}
                             type="email" 
-                            placeholder="john@example.com" 
+                            placeholder="your.email@example.com" 
                             className={`w-full bg-zinc-800/50 border ${errors.email ? 'border-red-500' : 'border-zinc-700'} rounded-lg px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-blue-500 transition-colors`}
                             disabled={isSubmitting}
                           />
