@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { ArrowRight, Mail, Github, Linkedin, MapPin, GraduationCap, Award, Users, CheckCircle, AlertCircle, ExternalLink, Sparkles, Facebook, Instagram, Briefcase, Heart, Code2, Layers, Wrench, Filter, Sun, Moon, Menu, X } from 'lucide-react';
-import SplitText from "./SplitText";
+import SplitText from "../components/SplitText";
+import PortfolioChatbot from '../components/PortfolioChatbot';
 
 const handleAnimationComplete = () => {
   console.log('All letters have animated!');
@@ -1687,6 +1688,7 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+      <PortfolioChatbot />
       </div>
     </div>
   );
