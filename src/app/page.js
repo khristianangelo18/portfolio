@@ -5,10 +5,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { ArrowRight, Mail, Github, Linkedin, MapPin, GraduationCap, Award, Users, CheckCircle, AlertCircle, ExternalLink, Sparkles, Facebook, Instagram, Briefcase, Heart, Code2, Layers, Wrench, Filter, Sun, Moon, Menu, X } from 'lucide-react';
-import SplitText from "../components/SplitText";
-import PortfolioChatbot from '../components/PortfolioChatbot';
-import TiltedCard from '../components/TiltedCard';
-import LogoLoop from '../components/LogoLoop';
+import SplitText from "@/components/SplitText";
+import PortfolioChatbot from '@/components/PortfolioChatbot';
+import TiltedCard from '@/components/TiltedCard/TiltedCard';
+import LogoLoop from '@/components/LogoLoop/LogoLoop';
 import { 
   Code, Terminal, FileCode, Coffee, Smartphone, 
   RefreshCw, ListChecks, Laptop
