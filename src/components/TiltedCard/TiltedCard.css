@@ -1,0 +1,59 @@
+/* TiltedCard.css */
+.tilted-card-figure {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: visible; /* CRITICAL: Tooltip needs this to show up */
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+.tilted-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d; /* CRITICAL: Activates child element layering */
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* CRITICAL: This is what fixes your specific layout error! */
+  background: white; /* Optional: gives the card base a clean surface */
+}
+
+.tilted-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Forces image to fit perfectly inside the container */
+  display: block;
+  transform: translateZ(0px); /* Sets base depth for the image layer */
+}
+
+.tilted-card-caption {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%) translateZ(60px); /* Position 60px "above" the image */
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #18181b;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .tilted-card-inner {
+    background: #18181b;
+  }
+  .tilted-card-caption {
+    background-color: rgba(24, 24, 27, 0.95);
+    color: #f4f4f5;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}

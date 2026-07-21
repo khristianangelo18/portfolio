@@ -1,12 +1,25 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { ArrowRight, Mail, Github, Linkedin, MapPin, GraduationCap, Award, Users, CheckCircle, AlertCircle, ExternalLink, Sparkles, Facebook, Instagram, Briefcase, Heart, Code2, Layers, Wrench, Filter, Sun, Moon, Menu, X } from 'lucide-react';
 import SplitText from "../components/SplitText";
 import PortfolioChatbot from '../components/PortfolioChatbot';
+import TiltedCard from '../components/TiltedCard';
+import LogoLoop from '../components/LogoLoop';
+import { 
+  Code, Terminal, FileCode, Coffee, Smartphone, 
+  RefreshCw, ListChecks, Laptop
+} from 'lucide-react'; 
+import { 
+  SiJavascript, SiPython, SiCplusplus, SiMysql, SiHtml5, SiXml, SiKotlin, SiPhp,
+  SiNextdotjs, SiReact, SiNodedotjs, SiTailwindcss,
+  SiGithub, SiGooglecloud, SiFigma, SiSupabase, SiPostman, SiPostgresql, SiVite, SiJira, SiVercel 
+} from 'react-icons/si';
+import { TbBrandCSharp, TbBrandCss3, TbCoffee, TbBrandAndroid, TbAgile } from 'react-icons/tb';
+import { VscCode, VscProject } from 'react-icons/vsc';
 
 const handleAnimationComplete = () => {
   console.log('All letters have animated!');
@@ -451,12 +464,6 @@ function ProjectCard({ title, description, tags, link, gradient }) {
   );
 }
 
-// Reveal Component
-// Wraps content that fades/slides in whenever it's scrolled into view, and
-// fades back out when it scrolls out of view — so it replays every time you
-// scroll past it. Each instance watches only its own element (not a large
-// parent section) and uses a threshold of 0 so it doesn't need a big
-// fraction of a tall block to be on-screen at once.
 function Reveal({ children, className = '', delayMs = 0, durationMs = 1000, from = 'up', as = 'div', ...rest }) {
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
@@ -696,9 +703,41 @@ export default function LandingPage() {
 
   const getSkillIconUrl = ({ source, slug }) => {
     if (source === 'local') return `/images/${slug}.png`;
-    if (source === 'devicon') return `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${slug}/${slug}-original.svg`;
+    // Use plain for C# so it has a transparent background instead of a solid hexagon box
+    if (source === 'devicon') {
+      const variant = slug === 'csharp' ? 'plain' : 'original';
+      return `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${slug}/${slug}-${variant}.svg`;
+    }
     return `https://cdn.simpleicons.org/${slug}`;
   };
+
+  const technicalStackLogos = useMemo(() => {
+    return Object.entries(skillIcons).map(([name, iconConfig]) => {
+
+      const darkModeHoverClass = iconConfig.invertInDarkMode
+        ? 'group-hover:brightness-0 group-hover:invert group-hover:opacity-100'
+        : 'group-hover:filter-none group-hover:opacity-100';
+
+      const lightModeHoverClass = 'group-hover:filter-none group-hover:opacity-100';
+
+      return {
+        node: (
+          <div className="group relative flex items-center justify-center p-1 cursor-pointer">
+            <img
+              src={getSkillIconUrl(iconConfig)}
+              alt={name}
+              className={`w-7 h-7 object-contain transition-all duration-300 transform group-hover:scale-110 ${
+                theme === 'dark'
+                  ? `brightness-0 invert opacity-70 ${darkModeHoverClass}`
+                  : `brightness-0 opacity-70 ${lightModeHoverClass}`
+              }`}
+            />
+          </div>
+        ),
+        title: name,
+      };
+    });
+  }, [theme]);
 
   const getSkillInitials = (name) => {
     const clean = name.replace(/[^a-zA-Z0-9 ]/g, ' ').trim();
@@ -1023,15 +1062,22 @@ export default function LandingPage() {
               {/* IMAGE CONTAINER: First on mobile (order-1), second on desktop (lg:order-2) */}
               <div className="flex items-center justify-center lg:justify-end order-1 lg:order-2">
                 <div className="relative group">
+                  {/* Soft ambient background glow */}
                   <div className="absolute -inset-1 bg-gradient-to-r from-zinc-400/10 via-white/10 to-zinc-600/10 rounded-2xl blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
                   
-                  <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-2xl overflow-hidden border-2 border-zinc-800/50 bg-zinc-950">
-                    <img 
-                      src="/images/aboutme.jpg" 
-                      alt="Profile" 
-                      className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+                  {/* CHANGED: Made width and height match (380px) to restore the wide, square profile appearance */}
+                  <div className="relative w-[350px] h-[350px] sm:w-[380px] sm:h-[380px]">
+                    <TiltedCard
+                      imageSrc="/images/aboutme.jpg"
+                      altText="Khristian Angelo Tiu"
+                      captionText="Khristian Angelo Tiu"
+                      containerClassName="w-full h-full shadow-2xl"
+                      imageClassName="w-full h-full object-cover rounded-2xl"
+                      rotateAmplitude={12}
+                      scaleOnHover={1.05}
+                      showMobileWarning={false}
+                      showTooltip={true}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-90"></div>
                   </div>
                 </div>
               </div>
@@ -1181,6 +1227,20 @@ export default function LandingPage() {
                     );
                   })}
                 </div>
+              </div>
+              <div className="w-full relative py-4 overflow-hidden select-none group/loop">
+                <LogoLoop
+                  logos={technicalStackLogos}
+                  speed={60}
+                  direction="right"
+                  logoHeight={32}
+                  gap={55}
+                  hoverSpeed={15} // Decelerates gracefully rather than a full abrasive stop
+                  scaleOnHover={true}
+                  fadeOut={true}
+                  fadeOutColor={theme === 'dark' ? '#09090b' : '#f8fafc'} // Matches your background tint perfectly dynamically
+                  ariaLabel="Technical Stack Rotation Timeline"
+                />
               </div>
               <div className="relative overflow-hidden rounded-xl border border-zinc-800/60 bg-zinc-900/45 p-5 md:p-6">
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-400/70 to-transparent"></div>
