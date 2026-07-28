@@ -951,7 +951,7 @@ export default function LandingPage() {
 
   const myProjects = [
     { 
-      title: "TechSync Remastered", 
+      title: "TechSync", 
       subtitle: "AI-Powered Developer Collaboration & Upskilling Platform",
       description: "An end-to-end platform with an AI skill-matching algorithm that pairs developers for peer code reviews and collaboration.", 
       overview: "Designed and engineered an end-to-end web platform featuring an AI skill-matching algorithm to pair developers for peer code reviews and project collaboration. Built with modern Next.js, Node.js, and PostgreSQL with an emphasis on seamless UI execution and high performant workflows.",
