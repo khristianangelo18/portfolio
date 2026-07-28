@@ -261,6 +261,31 @@ const styles = `
   .theme-light .invert-dark-logo {
     filter: none !important;
   }
+  .theme-dark .capstone-badge {
+    background-color: rgba(39, 39, 42, 0.9);
+    border-color: rgba(63, 63, 70, 0.8);
+    color: #ffffff;
+  }
+  .theme-light .capstone-badge {
+    background-color: #f1f5f9;
+    border-color: rgba(15, 23, 42, 0.12);
+    color: #09090b;
+  }
+  .theme-dark .visit-project-btn {
+    background-color: rgba(39, 39, 42, 0.9);
+    color: #ffffff;
+  }
+  .theme-dark .visit-project-btn:hover {
+    background-color: rgba(63, 63, 70, 0.9);
+  }
+  .theme-light .visit-project-btn {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(148, 163, 184, 0.58);
+    color: #09090b;
+  }
+  .theme-light .visit-project-btn:hover {
+    background-color: rgba(226, 232, 240, 0.82);
+  }
 `;
 
 // Navbar Component
@@ -434,13 +459,13 @@ function BrowserPreview({ title, link, image, tall = false }) {
   }, [link]);
 
   return (
-    <div className="relative bg-zinc-950 border-b border-zinc-800 overflow-hidden">
-      {/* Minimalist Browser Header Bar */}
-      <div className="flex items-center gap-3 px-4 py-2 bg-zinc-900/90 border-b border-zinc-800">
+    <div className="relative bg-zinc-950 border-b border-zinc-800/80 overflow-hidden">
+      {/* Macbook-Style Window Header Bar */}
+      <div className="flex items-center gap-3 px-4 py-2.5 bg-zinc-900/90 border-b border-zinc-800/80">
         <div className="flex gap-1.5 flex-shrink-0">
-          <span className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
-          <span className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
-          <span className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
+          <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+          <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
         </div>
         <div className="flex-1 flex items-center gap-2 min-w-0 px-3 py-0.5 rounded border border-zinc-800 bg-zinc-950">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
@@ -470,7 +495,7 @@ function BrowserPreview({ title, link, image, tall = false }) {
             />
           </div>
         ) : (
-          <div className="absolute inset-0 bg-zinc-900 flex items-center justify-center text-zinc-600 font-mono text-xs">
+          <div className="absolute inset-0 bg-zinc-900 flex items-center justify-center text-zinc-500 font-mono text-xs">
             [ Site Preview Unavailable ]
           </div>
         )}
@@ -479,23 +504,23 @@ function BrowserPreview({ title, link, image, tall = false }) {
   );
 }
 
-// ProjectBadges — small badge row (capstone/team/status) shared by the card and its modal
+// ProjectBadges Component
 function ProjectBadges({ team, status, isCapstone = false }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
       {isCapstone && (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono uppercase tracking-wider text-zinc-300 font-medium">
+        <span className="capstone-badge inline-flex items-center gap-1.5 px-2.5 py-0.5 border rounded text-[10px] font-mono uppercase tracking-wider font-medium">
           Capstone Project
         </span>
       )}
       {team && (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-zinc-900 border border-zinc-800 rounded text-[10px] font-mono uppercase tracking-wider text-zinc-400">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-zinc-900/60 dark:bg-zinc-900 border border-zinc-800 rounded text-[10px] font-mono uppercase tracking-wider text-zinc-400">
           <Users className="w-3 h-3" />
           {team}
         </span>
       )}
       {status && (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-zinc-900 border border-zinc-800 rounded text-[10px] font-mono uppercase tracking-wider text-zinc-400">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-zinc-900/60 dark:bg-zinc-900 border border-zinc-800 rounded text-[10px] font-mono uppercase tracking-wider text-zinc-400">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
           {status}
         </span>
@@ -519,7 +544,7 @@ function ProjectLinks({ link, github, size = 'md' }) {
           href={link}
           target="_blank"
           rel="noopener noreferrer"
-          className={`inline-flex items-center gap-2 ${pad} bg-white hover:bg-zinc-200 text-zinc-950 font-semibold rounded text-xs transition-colors`}
+          className={`visit-project-btn inline-flex items-center gap-2 ${pad} font-semibold rounded text-xs transition-colors`}
         >
           <span>visit project</span>
           <ExternalLink className="w-3.5 h-3.5" />
@@ -981,7 +1006,7 @@ export default function LandingPage() {
       ],
       tags: ["Kotlin", "AR Core", "Android Studio"], 
       link: "",
-      github: "",
+      github: "https://github.com/khristianangelo18/3whites-mobileapp",
       isCapstone: false,
       status: "Completed",
       team: "Mobile App"
