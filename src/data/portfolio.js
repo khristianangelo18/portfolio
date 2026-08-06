@@ -91,7 +91,7 @@ export const EDUCATION = [
     school: "Pamantasan ng Lungsod ng Maynila",
     degree: "Bachelor of Science in Information Technology",
     year: "2022 - Present",
-    achievement: "Consistent Dean's Lister (GWA: 1.43)"
+    achievement: "Magna Cum Laude"
   },
   {
     school: "Mariano Marcos Memorial High School",

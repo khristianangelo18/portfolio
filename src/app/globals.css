@@ -1,10 +1,18 @@
 @import "tailwindcss";
 
+/*
+ * ROOT-CAUSE FIX: without this, Tailwind v4's `dark:` variant matches the
+ * OS/browser prefers-color-scheme instead of this app's own theme toggle.
+ * That mismatch is what was making text and buttons disappear in light
+ * mode (dark: styles firing even while theme-light was active). This ties
+ * `dark:` classes to the actual .theme-dark class the app sets.
+ */
+@custom-variant dark (&:where(.theme-dark, .theme-dark *));
+
 body {
-  background-color: #09090b;
-  color: white;
   margin: 0;
   font-family: sans-serif;
+  transition: background-color 300ms ease, color 300ms ease;
 }
 
 /* Animations */
@@ -45,19 +53,23 @@ body {
   animation: fadeIn 0.5s ease-out forwards;
 }
 
-/* Background Gradients */
-.bg-split-tone {
-  background: linear-gradient(
-    100deg, 
-    #09090b 0%,    /* Pure Black (Left) */
-    #0b0b0d 30%,   /* Very subtle lift */
-    #0f0f11 70%,   /* Transitioning... */
-    #161618 100%   /* Soft Charcoal Gray (Right) */
-  );
+/* BACKGROUND GRADIENTS */
+.theme-dark .bg-split-tone {
+  background: radial-gradient(circle at 50% -20%, #0f172a 0%, #030712 70%),
+              linear-gradient(135deg, #020617 0%, #0b1329 50%, #030712 100%);
   background-attachment: fixed;
 }
 
-/* Theme Switching Engine */
+.theme-light .bg-split-tone {
+  background:
+    radial-gradient(circle at 12% 10%, rgba(79, 70, 229, 0.16), transparent 42%),
+    radial-gradient(circle at 88% 20%, rgba(6, 182, 212, 0.14), transparent 45%),
+    radial-gradient(circle at 50% 100%, rgba(37, 99, 235, 0.08), transparent 50%),
+    linear-gradient(135deg, #f8fafc 0%, #eef2ff 45%, #f0f9ff 100%);
+  background-attachment: fixed;
+}
+
+/* THEME SYSTEM ENGINE */
 .theme-root {
   color-scheme: dark;
   transition: background-color 300ms ease, color 300ms ease;
@@ -65,134 +77,22 @@ body {
 
 .theme-light {
   color-scheme: light;
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
 }
 
-.theme-light .bg-split-tone {
-  background:
-    radial-gradient(circle at 18% 18%, rgba(37, 99, 235, 0.12), transparent 28%),
-    radial-gradient(circle at 86% 12%, rgba(14, 165, 233, 0.11), transparent 30%),
-    linear-gradient(120deg, #f8fafc 0%, #eef2f7 50%, #e2e8f0 100%);
+/* FROSTED GLASS NAVBAR ENGINE */
+.theme-dark nav {
+  background: rgba(3, 7, 18, 0.75) !important;
+  border-bottom: 1px solid rgba(30, 41, 59, 0.5) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
 .theme-light nav {
-  background: rgba(255, 255, 255, 0.88);
-  border-color: rgba(148, 163, 184, 0.45);
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
-}
-
-.theme-light .bg-zinc-950 {
-  background-color: #f8fafc !important;
-}
-
-.theme-light .bg-zinc-950\/80 {
-  background-color: rgba(255, 255, 255, 0.88) !important;
-}
-
-.theme-light .bg-zinc-950\/70,
-.theme-light .bg-zinc-950\/60,
-.theme-light .bg-zinc-950\/50,
-.theme-light .bg-zinc-950\/45,
-.theme-light .bg-zinc-950\/35 {
-  background-color: rgba(248, 250, 252, 0.92) !important;
-}
-
-.theme-light .bg-zinc-900\/90,
-.theme-light .bg-zinc-900\/80,
-.theme-light .bg-zinc-900\/70,
-.theme-light .bg-zinc-900\/60,
-.theme-light .bg-zinc-900\/50,
-.theme-light .bg-zinc-900\/45,
-.theme-light .bg-zinc-900\/35 {
-  background-color: rgba(255, 255, 255, 0.9) !important;
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
-}
-
-.theme-light .bg-zinc-900 {
-  background-color: #ffffff !important;
-}
-
-.theme-light .bg-zinc-800\/60,
-.theme-light .bg-zinc-800\/50 {
-  background-color: rgba(226, 232, 240, 0.82) !important;
-}
-
-.theme-light .border-zinc-900,
-.theme-light .border-zinc-900\/50,
-.theme-light .border-zinc-800,
-.theme-light .border-zinc-800\/70,
-.theme-light .border-zinc-800\/60,
-.theme-light .border-zinc-800\/50,
-.theme-light .border-zinc-700,
-.theme-light .border-zinc-700\/50 {
-  border-color: rgba(148, 163, 184, 0.58) !important;
-}
-
-.theme-light .text-white,
-.theme-light .text-zinc-100 {
-  color: #0f172a !important;
-}
-
-.theme-light .text-zinc-300,
-.theme-light .text-zinc-400 {
-  color: #334155 !important;
-}
-
-.theme-light .text-zinc-500,
-.theme-light .text-zinc-600 {
-  color: #475569 !important;
-}
-
-.theme-light .hover\:text-white:hover {
-  color: #0f172a !important;
-}
-
-.theme-light .skill-filter-bar .hover\:bg-zinc-900:hover {
-  background-color: rgba(15, 23, 42, 0.08) !important;
-}
-
-.theme-light .skill-filter-bar .hover\:text-white:hover {
-  color: #0f172a !important;
-}
-
-.theme-light .skill-category-active {
-  border-color: rgba(37, 99, 235, 0.45) !important;
-  background-color: rgba(37, 99, 235, 0.08) !important;
-}
-
-.theme-light .skill-filter-pill-active {
-  background-color: #0f172a !important;
-  color: #ffffff !important;
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.18) !important;
-}
-
-.theme-light .bg-clip-text.text-transparent {
-  background-image: linear-gradient(90deg, #0f172a, #2563eb, #475569) !important;
-}
-
-.theme-light .skill-icon-chip {
-  background-color: #f1f5f9 !important;
-  border-color: rgba(15, 23, 42, 0.12) !important;
-}
-
-.theme-light input,
-.theme-light textarea {
-  background-color: rgba(255, 255, 255, 0.96) !important;
-  color: #0f172a !important;
-}
-
-.theme-light input::placeholder,
-.theme-light textarea::placeholder {
-  color: #94a3b8 !important;
-}
-
-.theme-light .shadow-blue-500\/10,
-.theme-light .hover\:shadow-blue-500\/10:hover {
-  box-shadow: 0 20px 45px rgba(59, 130, 246, 0.12) !important;
-}
-
-.theme-light .light-brand-badge {
-  background: #0f172a !important;
-  color: #ffffff !important;
+  /* Soft white opacity with subtle blue/slate tint so it pops against light backgrounds */
+  background: rgba(255, 255, 255, 0.65) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6) !important;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08) !important;
 }
 
 .theme-light .light-theme-toggle {
@@ -201,125 +101,116 @@ body {
 }
 
 .theme-light .light-toggle-thumb {
-  background: #ffffff !important;
-  color: #0f172a !important;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18);
+  background: #ffffff !important; /* Bright Blue circle */
+  color: #ffffff !important;
+  box-shadow: 0 8px 18px rgba(222, 223, 226, 0.18);
 }
 
-.theme-dark .theme-heading-muted {
-  color: #a1a1aa !important;
-}
-
-.theme-light .theme-heading-muted {
+/*
+ * Navbar.js is a separate component that never uses `dark:` variants at
+ * all — it's hardcoded to zinc/dark colors throughout (text-zinc-400,
+ * hover:text-white, border-zinc-800, etc.) and relies entirely on the
+ * .theme-light nav background swap above plus these targeted overrides
+ * for its links, icons, and dividers. Scoped to "nav" so it can't touch
+ * the slate-based classes used in the rest of the page.
+ */
+.theme-light nav .text-zinc-400,
+.theme-light nav .text-zinc-500 {
   color: #475569 !important;
 }
 
-.theme-dark .theme-section-title {
-  color: #ffffff !important;
-}
-
-.theme-light .theme-section-title {
+.theme-light nav a:hover,
+.theme-light nav button:hover {
   color: #0f172a !important;
 }
 
-.theme-dark .theme-project-icon {
-  background: linear-gradient(135deg, #27272a, #18181b) !important;
+.theme-light nav .border-zinc-800,
+.theme-light nav .border-zinc-900\/50 {
+  border-color: #cbd5e1 !important;
 }
 
-.theme-light .theme-project-icon {
-  background: linear-gradient(135deg, #dbeafe, #ffffff) !important;
-  border: 1px solid rgba(59, 130, 246, 0.24);
-  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.12);
+/*
+ * NOTE: The old blanket overrides that lived here (forcing every
+ * bg-slate-900, text-white, text-slate-300/400, h1-h4, p/span/li, and
+ * border-slate-700/800 to fixed light-mode colors) have been removed.
+ * They were fighting the component's own `dark:` pairings (e.g.
+ * `bg-white dark:bg-slate-900/60`, `text-slate-950 dark:text-white`),
+ * which now work correctly on their own thanks to the @custom-variant
+ * fix above. Worse, those overrides were also repainting elements that
+ * are *intentionally* dark in both themes (CTA buttons, badges, the
+ * loading screen) — e.g. forcing a dark navy button's white text to
+ * navy, or its dark background to white, made the button text
+ * disappear. Removing them lets every element resolve to the color its
+ * own class already specifies.
+ */
+
+/* GENUINE GAP: this logo text has no light-mode variant of its own
+   (`text-slate-100 dark:text-white`), so it needs one explicit fix. */
+.theme-light .text-slate-100 {
+  color: #0f172a;
 }
 
-.theme-dark .theme-subtle-icon {
-  color: #52525b !important;
-}
-
-.theme-light .theme-subtle-icon {
-  color: #64748b !important;
-}
-
-.theme-light .theme-loading-screen {
-  background: #f8fafc !important;
-}
-
-.theme-light .theme-loading-title {
+/* LIGHT MODE INPUTS & BUTTONS */
+.theme-light input,
+.theme-light textarea {
+  background-color: #ffffff !important;
   color: #0f172a !important;
+  border-color: #cbd5e1 !important;
 }
 
-.theme-light .theme-loading-track {
-  background: rgba(226, 232, 240, 0.95) !important;
-  border-color: rgba(148, 163, 184, 0.62) !important;
+.theme-light input::placeholder,
+.theme-light textarea::placeholder {
+  color: #94a3b8 !important;
 }
 
-.theme-light .theme-loading-bar {
-  background: linear-gradient(90deg, #2563eb, #0ea5e9) !important;
-  box-shadow: 0 10px 28px rgba(37, 99, 235, 0.22) !important;
-}
-
-.theme-light .theme-loading-glow {
-  background: rgba(37, 99, 235, 0.24) !important;
-}
-
-.theme-light .theme-loading-dot {
-  background: #2563eb !important;
-}
-
-.theme-light .theme-outline-button {
-  color: #0f172a !important;
-  background: rgba(255, 255, 255, 0.78) !important;
-  border-color: rgba(37, 99, 235, 0.45) !important;
-}
-
-.theme-light .theme-outline-button svg {
-  color: #2563eb !important;
-}
-
-.theme-light .theme-outline-button:hover {
-  background: rgba(219, 234, 254, 0.95) !important;
-  border-color: rgba(37, 99, 235, 0.8) !important;
-}
-
-.theme-light .submit-btn-text {
-  color: #ffffff !important;
-}
-
+/* LOGO INVERSION ENGINE */
 .theme-dark .invert-dark-logo {
   filter: invert(1) brightness(2);
 }
 
 .theme-light .invert-dark-logo {
-  filter: none !important;
+  filter: none;
 }
 
-.theme-dark .capstone-badge {
-  background-color: rgba(39, 39, 42, 0.9);
-  border-color: rgba(63, 63, 70, 0.8);
-  color: #ffffff;
+.theme-light .developer-pill {
+  background: rgba(224, 242, 254, 0.7) !important; /* Soft blueish tint */
+  color: #0284c7 !important; /* Sky blue text color */
+  border: 1px solid rgba(186, 230, 253, 0.8) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 6px rgba(14, 165, 233, 0.12) !important;
 }
 
-.theme-light .capstone-badge {
-  background-color: #f1f5f9;
-  border-color: rgba(15, 23, 42, 0.12);
-  color: #09090b;
+/* Glassmorphism Container for developer.js in Light Mode */
+.theme-light .developer-card {
+  background: rgba(224, 242, 254, 0.55) !important; /* Soft sky blue glass opacity */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-color: rgba(186, 230, 253, 0.8) !important;
+  box-shadow: 0 20px 25px -5px rgba(14, 165, 233, 0.1), 0 8px 10px -6px rgba(14, 165, 233, 0.05) !important;
 }
 
-.theme-dark .visit-project-btn {
-  background-color: rgba(39, 39, 42, 0.9);
-  color: #ffffff;
+.theme-light .developer-card-header {
+  background: rgba(186, 230, 253, 0.5) !important;
+  border-bottom-color: rgba(125, 211, 252, 0.6) !important;
 }
 
-.theme-dark .visit-project-btn:hover {
-  background-color: rgba(63, 63, 70, 0.9);
+/* Color adjustments inside the light glass container for high contrast */
+.theme-light .developer-card .text-slate-500 {
+  color: #475569 !important;
 }
-
-.theme-light .visit-project-btn {
-  background-color: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(148, 163, 184, 0.58);
-  color: #09090b;
+.theme-light .developer-card .text-purple-400 {
+  color: #7c3aed !important;
 }
-
-.theme-light .visit-project-btn:hover {
-  background-color: rgba(226, 232, 240, 0.82);
+.theme-light .developer-card .text-cyan-300 {
+  color: #0284c7 !important;
+}
+.theme-light .developer-card .text-sky-300 {
+  color: #0369a1 !important;
+}
+.theme-light .developer-card .text-emerald-400 {
+  color: #0d9488 !important;
+}
+.theme-light .developer-card .text-orange-400 {
+  color: #ea580c !important;
 }
