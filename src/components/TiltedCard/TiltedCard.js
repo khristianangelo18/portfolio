@@ -20,6 +20,7 @@ export default function TiltedCard({
   rotateAmplitude = 12,
   showMobileWarning = true,
   showTooltip = true,
+  children,
 }) {
   const ref = useRef(null);
   const [lastY, setLastY] = useState(0);
@@ -87,9 +88,7 @@ export default function TiltedCard({
     <figure
       ref={ref}
       className={`tilted-card-figure ${containerClassName}`}
-      style={{
-        perspective: '1000px', // Creates the 3D space
-      }}
+      style={{ perspective: '1000px' }}
       onMouseMove={handleMouse}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -97,26 +96,29 @@ export default function TiltedCard({
       <motion.div
         className="tilted-card-inner"
         style={{
-          // Apply overall rotations and scale to the inner container
           rotateX,
           rotateY,
           scale,
         }}
       >
-        <img
-          src={imageSrc}
-          alt={altText}
-          className={`tilted-card-img ${imageClassName}`}
-        />
+        {/* Render children if provided, otherwise fallback to img */}
+        {children ? (
+          children
+        ) : (
+          <img
+            src={imageSrc}
+            alt={altText}
+            className={`tilted-card-img ${imageClassName}`}
+          />
+        )}
 
-        {showTooltip && (
+        {showTooltip && captionText && (
           <motion.figcaption
             className="tilted-card-caption"
             style={{
-              x, // Attach tooltip x/y to raw mouse motion values
+              x,
               y,
-              opacity, // Tooltip fades in/out on hover
-              // Also apply slight rotation for perspective
+              opacity,
               rotateX: rotateFigX,
               rotateY: rotateFigY,
             }}

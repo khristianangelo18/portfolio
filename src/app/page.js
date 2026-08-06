@@ -11,8 +11,10 @@ import {
 } from 'lucide-react';
 
 import SplitText from "@/components/SplitText";
+import BorderGlow from '@/components/BorderGlow/BorderGlow';
 import PortfolioChatbot from '@/components/PortfolioChatbot';
 import TiltedCard from '@/components/TiltedCard/TiltedCard';
+import Plasma from '@/components/Plasma/Plasma';
 import LogoLoop from '@/components/LogoLoop/LogoLoop';
 import Navbar from '@/components/Navbar';
 import { FeaturedProjectCard } from '@/components/ProjectCards';
@@ -291,8 +293,13 @@ export default function LandingPage() {
 
   return (
     <div className={`theme-root ${theme === 'light' ? 'theme-light' : 'theme-dark'} bg-[#030712] min-h-screen text-slate-100 overflow-hidden`}>
-      <div className="fixed inset-0 z-0 pointer-events-none bg-split-tone">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900/60 via-slate-950/80 to-[#030712]"></div>
+      {/* PLASMA BACKGROUND */}
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-40 dark:opacity-50 transition-opacity duration-500">
+        <Plasma 
+          color={theme === 'dark' ? '#3b82f6' : '#93c5fd'}
+          speed={0.5}
+          amplitude={0.3}
+        />
       </div>
 
       {isLoading && (
@@ -409,44 +416,49 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* CODE-EDITOR STYLE CARD */}
-              <div className="developer-card w-full max-w-xl mx-auto lg:mx-0 rounded-2xl overflow-hidden border border-slate-800 shadow-2xl bg-[#0b1120] text-left transition-all duration-300">
-                {/* window chrome */}
-                <div className="developer-card-header flex items-center gap-2 px-4 py-3 bg-[#11182b] border-b border-slate-800">
-                  <div className="flex gap-2">
-                    <span className="w-3 h-3 rounded-full bg-red-500" />
-                    <span className="w-3 h-3 rounded-full bg-yellow-400" />
-                    <span className="w-3 h-3 rounded-full bg-green-500" />
+              <TiltedCard
+                showTooltip={false}
+                scaleOnHover={1.03}
+                rotateAmplitude={10}
+                containerClassName="w-full max-w-xl mx-auto lg:mx-0"
+              >
+                <div className="developer-card w-full rounded-2xl overflow-hidden border border-slate-800 shadow-2xl bg-[#0b1120] text-left transition-all duration-300">
+                  {/* window chrome */}
+                  <div className="developer-card-header flex items-center gap-2 px-4 py-3 bg-[#11182b] border-b border-slate-800">
+                    <div className="flex gap-2">
+                      <span className="w-3 h-3 rounded-full bg-red-500" />
+                      <span className="w-3 h-3 rounded-full bg-yellow-400" />
+                      <span className="w-3 h-3 rounded-full bg-green-500" />
+                    </div>
+                    <div className="flex-1 flex justify-end">
+                      <span className="developer-pill px-3 py-1 rounded-md bg-slate-950/60 text-slate-400 text-xs font-mono flex items-center gap-1.5 transition-colors duration-300">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />                          developer.js
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex-1 flex justify-end">
-                    <span className="developer-pill px-3 py-1 rounded-md bg-slate-950/60 dark:bg-slate-950/60 text-slate-700 dark:text-slate-400 text-xs font-mono flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                      developer.js
-                    </span>
-                  </div>
-                </div>
 
-                {/* code body */}
-                <div className="p-6 sm:p-8 font-mono text-xs sm:text-sm md:text-base leading-relaxed overflow-x-auto">
-                  <p><span className="text-purple-400">const</span> <span className="text-cyan-300">Developer</span> <span className="text-slate-500">=</span> <span className="text-slate-500">{'{'}</span></p>
-                  <p className="pl-4 sm:pl-6"><span className="text-sky-300">name</span><span className="text-slate-500">:</span> <span className="text-emerald-400">"Khristian Angelo Tiu"</span><span className="text-slate-500">,</span></p>
-                  <p className="pl-4 sm:pl-6">
-                    <span className="text-sky-300">role</span><span className="text-slate-500">:</span>{' '}
-                    <span className="text-emerald-400">"Software Engineer, Project Management, Full-Stack Developer, Quality Assurance"</span><span className="text-slate-500">,</span>
-                  </p>
-                  <p className="pl-4 sm:pl-6"><span className="text-sky-300">location</span><span className="text-slate-500">:</span> <span className="text-emerald-400">"Manila, Philippines"</span><span className="text-slate-500">,</span></p>
-                  <p className="pl-4 sm:pl-6">
-                    <span className="text-sky-300">skills</span><span className="text-slate-500">:</span>{' '}
-                    <span className="text-slate-500">[</span>
-                    <span className="text-emerald-400">"React"</span><span className="text-slate-500">, </span>
-                    <span className="text-emerald-400">"Next.js"</span><span className="text-slate-500">, </span>
-                    <span className="text-emerald-400">"Node.js"</span>
-                    <span className="text-slate-500">],</span>
-                  </p>
-                  <p className="pl-4 sm:pl-6"><span className="text-sky-300">availableForWork</span><span className="text-slate-500">:</span> <span className="text-orange-400">true</span></p>
-                  <p><span className="text-slate-500">{'}'}</span><span className="text-slate-500">;</span></p>
+                  {/* code body */}
+                  <div className="p-6 sm:p-8 font-mono text-xs sm:text-sm md:text-base leading-relaxed overflow-x-auto">
+                    <p><span className="text-purple-400">const</span> <span className="text-cyan-300">Developer</span> <span className="text-slate-500">=</span> <span className="text-slate-500">{'{'}</span></p>
+                    <p className="pl-4 sm:pl-6"><span className="text-sky-300">name</span><span className="text-slate-500">:</span> <span className="text-emerald-400">"Khristian Angelo Tiu"</span><span className="text-slate-500">,</span></p>
+                    <p className="pl-4 sm:pl-6">
+                      <span className="text-sky-300">role</span><span className="text-slate-500">:</span>{' '}
+                      <span className="text-emerald-400">"Software Engineer, Project Manager, Full Stack Developer, Quality Assurance Engineer"</span><span className="text-slate-500">,</span>
+                    </p>
+                    <p className="pl-4 sm:pl-6"><span className="text-sky-300">location</span><span className="text-slate-500">:</span> <span className="text-emerald-400">"Manila, Philippines"</span><span className="text-slate-500">,</span></p>
+                    <p className="pl-4 sm:pl-6">
+                      <span className="text-sky-300">skills</span><span className="text-slate-500">:</span>{' '}
+                      <span className="text-slate-500">[</span>
+                      <span className="text-emerald-400">"React"</span><span className="text-slate-500">, </span>
+                      <span className="text-emerald-400">"Next.js"</span><span className="text-slate-500">, </span>
+                      <span className="text-emerald-400">"Node.js"</span>
+                      <span className="text-slate-500">],</span>
+                    </p>
+                    <p className="pl-4 sm:pl-6"><span className="text-sky-300">availableForWork</span><span className="text-slate-500">:</span> <span className="text-orange-400">true</span></p>
+                    <p><span className="text-slate-500">{'}'}</span><span className="text-slate-500">;</span></p>
+                  </div>
                 </div>
-              </div>
+              </TiltedCard>
             </div>
 
             <div className={`mt-16 sm:mt-0 sm:absolute sm:bottom-4 sm:left-1/2 sm:-translate-x-1/2 flex flex-col items-center gap-2 animate-bounce transition-opacity duration-500 ${showHeroAnimations ? 'opacity-100' : 'opacity-0'}`}>
@@ -788,7 +800,7 @@ export default function LandingPage() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
                 {PROJECTS.map((project) => (
                   <Reveal key={project.title} className="h-full">
-                    <FeaturedProjectCard {...project} />
+                    <FeaturedProjectCard {...project} theme={theme} />
                   </Reveal>
                 ))}
               </div>

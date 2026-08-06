@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { Users, CheckCircle, ExternalLink, Github, ArrowRight, X, Sparkles } from 'lucide-react';
-
+import BorderGlow from '@/components/BorderGlow/BorderGlow';
 export function BrowserPreview({ title, link, image, tall = false }) {
   const isExternalLink = link && link !== 'javascript:void(0)' && link !== '#';
 
@@ -96,7 +96,7 @@ export function ProjectLinks({ link, github, size = 'md' }) {
   );
 }
 
-export function ProjectModal({ project, onClose }) {
+export function ProjectModal({ project, onClose, theme }) { // <-- Pass theme here
   useEffect(() => {
     const onKeyDown = (e) => { if (e.key === 'Escape') onClose(); };
     document.addEventListener('keydown', onKeyDown);
@@ -111,7 +111,8 @@ export function ProjectModal({ project, onClose }) {
   const { title, subtitle, overview, description, features, tags, link, image, status, team, github } = project;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
+    /* Include the active theme class on the portal wrapper */
+    <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 ${theme === 'light' ? 'theme-light' : 'theme-dark'}`} role="dialog" aria-modal="true">
       <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-md" onClick={onClose} />
       <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-300 dark:border-slate-800 bg-white/95 dark:bg-slate-950 backdrop-blur-xl shadow-2xl animate-fade-in-up">
         <button onClick={onClose} className="absolute top-3 right-3 z-20 p-2 rounded-xl bg-white/80 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white transition-colors">
@@ -161,106 +162,133 @@ export function ProjectModal({ project, onClose }) {
 }
 
 export function FeaturedProjectCard(project) {
-  const { title, subtitle, description, tags, link, image, status, team, github, isCapstone } = project;
+  const { title, subtitle, description, tags, link, image, status, team, github, isCapstone, theme } = project;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
   const hasLinks = (link && link !== 'javascript:void(0)' && link !== '#');
 
+  // Electric Cyan preset (Primary Featured Glow)
+  const cyanColors = ['#22d3ee', '#38bdf8', '#0284c7'];
+  const cyanGlow = '190 90 60';
+
   return (
     <>
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => setIsModalOpen(true)}
-        className="group relative w-full h-full flex flex-col justify-between rounded-2xl border border-slate-300/80 dark:border-slate-800/80 hover:border-slate-400 dark:hover:border-slate-700 bg-white/80 dark:bg-slate-900/50 backdrop-blur-md overflow-hidden transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg hover:-translate-y-0.5"
+      <BorderGlow
+        colors={cyanColors}
+        glowColor={cyanGlow}
+        backgroundColor={theme === 'light' ? 'rgba(255, 255, 255, 0.85)' : 'rgba(15, 23, 42, 0.6)'}
+        borderRadius={16}
+        edgeSensitivity={25}
+        glowIntensity={1.2}
+        fillOpacity={0}
+        className="w-full h-full"
       >
-        <div>
-          <BrowserPreview title={title} link={link} image={image} />
-          <div className="p-5 sm:p-6 space-y-3">
-            <ProjectBadges team={team} status={status} isCapstone={isCapstone} />
-            <div>
-              <h3 className="text-xl font-black text-slate-950 dark:text-white transition-colors">{title}</h3>
-              {subtitle && <p className="text-slate-600 dark:text-slate-400 font-mono text-xs mt-0.5 font-semibold">{subtitle}</p>}
-            </div>
-            <p className="text-slate-800 dark:text-slate-300 text-xs sm:text-sm line-clamp-2 leading-relaxed font-normal">{description}</p>
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              {tags.map((tag, i) => (
-                <span key={i} className="px-2.5 py-0.5 bg-white/90 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-md text-[11px] text-slate-900 dark:text-slate-400 font-mono font-bold">{tag}</span>
-              ))}
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => setIsModalOpen(true)}
+          className="group relative w-full h-full flex flex-col justify-between rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg"
+        >
+          <div>
+            <BrowserPreview title={title} link={link} image={image} />
+            <div className="p-5 sm:p-6 space-y-3">
+              <ProjectBadges team={team} status={status} isCapstone={isCapstone} />
+              <div>
+                <h3 className="text-xl font-black text-slate-950 dark:text-white transition-colors">{title}</h3>
+                {subtitle && <p className="text-slate-600 dark:text-slate-400 font-mono text-xs mt-0.5 font-semibold">{subtitle}</p>}
+              </div>
+              <p className="text-slate-800 dark:text-slate-300 text-xs sm:text-sm line-clamp-2 leading-relaxed font-normal">{description}</p>
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {tags.map((tag, i) => (
+                  <span key={i} className="px-2.5 py-0.5 bg-white/90 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-md text-[11px] text-slate-900 dark:text-slate-400 font-mono font-bold">{tag}</span>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="px-5 sm:px-6 pb-5 pt-3 border-t border-slate-200/80 dark:border-slate-900 flex items-center justify-between gap-4">
-          <div>{hasLinks ? <ProjectLinks link={link} github={github} /> : <span className="text-[11px] font-mono text-slate-500 font-bold">Mobile App</span>}</div>
-          <span className="flex items-center gap-1 text-xs font-mono text-slate-700 dark:text-slate-400 group-hover:text-slate-950 dark:group-hover:text-slate-200 transition-colors font-bold">
-            details <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-blue-600 dark:text-cyan-400" />
-          </span>
+          <div className="px-5 sm:px-6 pb-5 pt-3 border-t border-slate-200/80 dark:border-slate-900 flex items-center justify-between gap-4">
+            <div>{hasLinks ? <ProjectLinks link={link} github={github} /> : <span className="text-[11px] font-mono text-slate-500 font-bold">Mobile App</span>}</div>
+            <span className="flex items-center gap-1 text-xs font-mono text-slate-700 dark:text-slate-400 group-hover:text-slate-950 dark:group-hover:text-slate-200 transition-colors font-bold">
+              details <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-blue-600 dark:text-cyan-400" />
+            </span>
+          </div>
         </div>
-      </div>
+      </BorderGlow>
 
-      {isModalOpen && mounted && createPortal(<ProjectModal project={project} onClose={() => setIsModalOpen(false)} />, document.body)}
+      {isModalOpen && mounted && createPortal(<ProjectModal project={project} theme={theme} onClose={() => setIsModalOpen(false)} />, document.body)}
     </>
   );
 }
 
 export function ProjectCard(project) {
-  const { title, subtitle, description, tags, link, github } = project;
+  const { title, subtitle, description, tags, link, github, theme } = project;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
+  // Deep Indigo preset (Secondary Project Cards Glow)
+  const indigoColors = ['#6366f1', '#818cf8', '#4f46e5'];
+  const indigoGlow = '240 85 65';
+
   return (
     <>
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => setIsModalOpen(true)}
-        className="group relative bg-white/80 dark:bg-slate-900/40 backdrop-blur-md border border-slate-300/80 dark:border-slate-800/80 hover:border-slate-400 dark:hover:border-slate-700 rounded-2xl overflow-hidden transition-all duration-300 h-full flex flex-col justify-between p-5 cursor-pointer shadow-sm hover:shadow-md"
+      <BorderGlow
+        colors={indigoColors}
+        glowColor={indigoGlow}
+        backgroundColor={theme === 'light' ? 'rgba(255, 255, 255, 0.85)' : 'rgba(15, 23, 42, 0.5)'}
+        borderRadius={16}
+        edgeSensitivity={25}
+        glowIntensity={1.0}
+        fillOpacity={0}
+        className="w-full h-full"
       >
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800/80 flex items-center justify-center border border-slate-300 dark:border-slate-700/50">
-              <Sparkles className="w-4 h-4 text-slate-800 dark:text-slate-300" />
-            </div>
-            <span className="flex items-center gap-1 text-[11px] font-mono text-slate-700 dark:text-slate-400 group-hover:text-slate-950 dark:group-hover:text-slate-200 transition-colors font-bold">
-              details
-              <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform text-blue-600 dark:text-cyan-400" />
-            </span>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-black text-slate-950 dark:text-white transition-colors">
-              {title}
-            </h3>
-            {subtitle && <p className="text-xs font-mono text-slate-600 dark:text-slate-400 mt-0.5 font-semibold">{subtitle}</p>}
-          </div>
-
-          <p className="text-slate-800 dark:text-slate-300 text-xs leading-relaxed line-clamp-3">
-            {description}
-          </p>
-        </div>
-
-        <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-900 mt-4">
-          <div className="flex flex-wrap gap-1.5">
-            {tags.map((tag, i) => (
-              <span key={i} className="px-2 py-0.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded text-[10px] text-slate-900 dark:text-slate-400 font-mono font-bold">
-                {tag}
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => setIsModalOpen(true)}
+          className="group relative w-full h-full flex flex-col justify-between p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg"
+        >
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800/80 flex items-center justify-center border border-slate-300 dark:border-slate-700/50">
+                <Sparkles className="w-4 h-4 text-slate-800 dark:text-slate-300" />
+              </div>
+              <span className="flex items-center gap-1 text-[11px] font-mono text-slate-700 dark:text-slate-400 group-hover:text-slate-950 dark:group-hover:text-slate-200 transition-colors font-bold">
+                details
+                <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform text-blue-600 dark:text-cyan-400" />
               </span>
-            ))}
+            </div>
+
+            <div>
+              <h3 className="text-lg font-black text-slate-950 dark:text-white transition-colors">
+                {title}
+              </h3>
+              {subtitle && <p className="text-xs font-mono text-slate-600 dark:text-slate-400 mt-0.5 font-semibold">{subtitle}</p>}
+            </div>
+
+            <p className="text-slate-800 dark:text-slate-300 text-xs leading-relaxed line-clamp-3">
+              {description}
+            </p>
           </div>
 
-          <ProjectLinks link={link} github={github} />
-        </div>
-      </div>
+          <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-900 mt-4">
+            <div className="flex flex-wrap gap-1.5">
+              {tags.map((tag, i) => (
+                <span key={i} className="px-2 py-0.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded text-[10px] text-slate-900 dark:text-slate-400 font-mono font-bold">
+                  {tag}
+                </span>
+              ))}
+            </div>
 
-      {isModalOpen && mounted && createPortal(
-        <ProjectModal project={project} onClose={() => setIsModalOpen(false)} />,
-        document.body
-      )}
+            <ProjectLinks link={link} github={github} />
+          </div>
+        </div>
+      </BorderGlow>
+
+      {isModalOpen && mounted && createPortal(<ProjectModal project={project} theme={theme} onClose={() => setIsModalOpen(false)} />, document.body)}
     </>
   );
 }
