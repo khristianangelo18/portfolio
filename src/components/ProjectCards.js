@@ -169,7 +169,6 @@ export function FeaturedProjectCard(project) {
   useEffect(() => setMounted(true), []);
   const hasLinks = (link && link !== 'javascript:void(0)' && link !== '#');
 
-  // Electric Cyan preset (Primary Featured Glow)
   const cyanColors = ['#22d3ee', '#38bdf8', '#0284c7'];
   const cyanGlow = '190 90 60';
 
@@ -178,7 +177,7 @@ export function FeaturedProjectCard(project) {
       <BorderGlow
         colors={cyanColors}
         glowColor={cyanGlow}
-        backgroundColor={theme === 'light' ? 'rgba(255, 255, 255, 0.85)' : 'rgba(15, 23, 42, 0.6)'}
+        backgroundColor="transparent"
         borderRadius={16}
         edgeSensitivity={25}
         glowIntensity={1.2}
@@ -189,7 +188,7 @@ export function FeaturedProjectCard(project) {
           role="button"
           tabIndex={0}
           onClick={() => setIsModalOpen(true)}
-          className="group relative w-full h-full flex flex-col justify-between rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg"
+          className="group relative w-full h-full flex flex-col justify-between rounded-2xl bg-white/60 dark:bg-slate-900/40 backdrop-blur-md border border-slate-300/60 dark:border-slate-800/60 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg"
         >
           <div>
             <BrowserPreview title={title} link={link} image={image} />
@@ -229,7 +228,6 @@ export function ProjectCard(project) {
 
   useEffect(() => setMounted(true), []);
 
-  // Deep Indigo preset (Secondary Project Cards Glow)
   const indigoColors = ['#6366f1', '#818cf8', '#4f46e5'];
   const indigoGlow = '240 85 65';
 
@@ -238,7 +236,7 @@ export function ProjectCard(project) {
       <BorderGlow
         colors={indigoColors}
         glowColor={indigoGlow}
-        backgroundColor={theme === 'light' ? 'rgba(255, 255, 255, 0.85)' : 'rgba(15, 23, 42, 0.5)'}
+        backgroundColor="transparent"
         borderRadius={16}
         edgeSensitivity={25}
         glowIntensity={1.0}
@@ -249,7 +247,7 @@ export function ProjectCard(project) {
           role="button"
           tabIndex={0}
           onClick={() => setIsModalOpen(true)}
-          className="group relative w-full h-full flex flex-col justify-between p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg"
+          className="group relative w-full h-full flex flex-col justify-between p-5 rounded-2xl bg-white/60 dark:bg-slate-900/40 backdrop-blur-md border border-slate-300/60 dark:border-slate-800/60 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg"
         >
           <div className="space-y-3">
             <div className="flex items-center justify-between">

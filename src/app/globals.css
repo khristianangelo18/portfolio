@@ -172,45 +172,78 @@ body {
   filter: none;
 }
 
+/* LIGHT MODE: Developer Pill Badge */
 .theme-light .developer-pill {
-  background: rgba(224, 242, 254, 0.7) !important; /* Soft blueish tint */
-  color: #0284c7 !important; /* Sky blue text color */
-  border: 1px solid rgba(186, 230, 253, 0.8) !important;
+  background: rgba(15, 23, 42, 0.75) !important; /* Matches the header bar glass tone */
+  color: #38bdf8 !important; /* Sky blue text color for sharp visibility */
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 2px 6px rgba(14, 165, 233, 0.12) !important;
+  box-shadow: 0 2px 6px rgba(2, 6, 23, 0.2) !important;
 }
 
-/* Glassmorphism Container for developer.js in Light Mode */
+/* DARK MODE: Frosted Glass for developer.js & developer-pill */
+.theme-dark .developer-card {
+  background: rgba(11, 17, 32, 0.65) !important; /* Semi-transparent dark slate */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important; /* Subtle frosted glass border */
+  box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5) !important;
+}
+
+.theme-dark .developer-card-header {
+  background: rgba(17, 24, 43, 0.6) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.theme-dark .developer-pill {
+  background: rgba(3, 7, 18, 0.7) !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* LIGHT MODE: Lighter Frosted Glass for developer.js */
 .theme-light .developer-card {
-  background: rgba(224, 242, 254, 0.55) !important; /* Soft sky blue glass opacity */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-color: rgba(186, 230, 253, 0.8) !important;
-  box-shadow: 0 20px 25px -5px rgba(14, 165, 233, 0.1), 0 8px 10px -6px rgba(14, 165, 233, 0.05) !important;
+  /* Lighter slate-blue glass with 55% opacity */
+  background: rgba(15, 23, 42, 0.55) !important; 
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(56, 189, 248, 0.3) !important; /* Soft cyan-blue glass edge */
+  box-shadow: 0 20px 30px -10px rgba(15, 23, 42, 0.15) !important;
 }
 
 .theme-light .developer-card-header {
-  background: rgba(186, 230, 253, 0.5) !important;
-  border-bottom-color: rgba(125, 211, 252, 0.6) !important;
+  background: rgba(30, 41, 59, 0.5) !important;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.25) !important;
 }
 
-/* Color adjustments inside the light glass container for high contrast */
+.theme-light .developer-pill {
+  background: rgba(15, 23, 42, 0.6) !important; /* Slightly lighter pill background */
+  color: #38bdf8 !important; /* Bright sky blue for crisp visibility */
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 6px rgba(2, 6, 23, 0.15) !important;
+}
+
+/* Bright, vibrant code syntax for high contrast on glass */
 .theme-light .developer-card .text-slate-500 {
-  color: #475569 !important;
+  color: #94a3b8 !important;
 }
 .theme-light .developer-card .text-purple-400 {
-  color: #7c3aed !important;
+  color: #c084fc !important;
 }
 .theme-light .developer-card .text-cyan-300 {
-  color: #0284c7 !important;
+  color: #67e8f9 !important;
 }
 .theme-light .developer-card .text-sky-300 {
-  color: #0369a1 !important;
+  color: #7dd3fc !important;
 }
 .theme-light .developer-card .text-emerald-400 {
-  color: #0d9488 !important;
+  color: #34d399 !important;
 }
 .theme-light .developer-card .text-orange-400 {
-  color: #ea580c !important;
+  color: #fb923c !important;
 }

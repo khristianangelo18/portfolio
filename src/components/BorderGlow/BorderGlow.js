@@ -53,7 +53,7 @@ const BorderGlow = ({
   className = '',
   edgeSensitivity = 0,
   glowColor = '190 90 60',
-  backgroundColor = '#0f172a',
+  backgroundColor = 'transparent',
   borderRadius = 16,
   glowRadius = 30,
   glowIntensity = 1.0,
@@ -135,12 +135,12 @@ const BorderGlow = ({
 
   return (
     <div
-      ref={cardRef}
-      onPointerMove={handlePointerMove}
-      onPointerLeave={handlePointerLeave}
-      className={`border-glow-card ${className}`}
-      style={{
-        '--card-bg': backgroundColor,
+        ref={cardRef}
+        onPointerMove={handlePointerMove}
+        onPointerLeave={handlePointerLeave}
+        className={`border-glow-card ${className}`}
+        style={{
+        '--card-bg': 'transparent', // <-- HARDCODE TO TRANSPARENT TO STOP INNER BLEED
         '--edge-sensitivity': edgeSensitivity,
         '--border-radius': `${borderRadius}px`,
         '--glow-padding': `${glowRadius}px`,
@@ -148,14 +148,14 @@ const BorderGlow = ({
         '--fill-opacity': fillOpacity,
         ...glowVars,
         ...buildGradientVars(colors),
-      }}
+        }}
     >
-      <span className="edge-light" />
-      <div className="border-glow-inner">
+        <span className="edge-light" />
+        <div className="border-glow-inner">
         {children}
-      </div>
+        </div>
     </div>
-  );
+    );
 };
 
 export default BorderGlow;
