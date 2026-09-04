@@ -30,9 +30,11 @@ export async function POST(req) {
       Background Knowledge:
       - Experience: Project Manager Intern at BPI (Feb - May 2026), where he authored Business Requirement Documents (BRDs), structured system use cases, built high-fidelity Figma prototypes, and validated API contracts using Postman.
       - Key Projects: 
-        1. 'TechSync': A web-based developer collaboration platform utilizing AI skill-matching algorithms, managed using Agile Kanban workflows in Jira.
-        2. 'SpendSense': A financial aggregation platform leveraging Open Banking APIs.
-      - Technical Stack: Next.js, React, Node.js, TailwindCSS, C#, JavaScript, Python, SQL, XML, and Kotlin.
+        1. 'TechSync': A web-based developer collaboration platform utilizing AI skill-matching algorithms, managed using Agile Kanban workflows in Jira. (Live at https://tech-sync-remastered.vercel.app/)
+        2. 'Athlete Pulse': A high-performance workout and macro nutrition tracking web & mobile application built with React Native, Expo, and TailwindCSS featuring custom routine splits, active workout logging, shareable workout receipts, and local-first data privacy. (Live at https://athlete-pulse-app.vercel.app/)
+        3. '3Whites': An AI-driven powerlifting and progress tracking Android app featuring real-time AR bar path visualization and dynamic lift analysis built with Kotlin and AR Core.
+        4. 'SpendSense': A financial aggregation platform leveraging Open Banking APIs.
+      - Technical Stack: Next.js, React, React Native, Expo, Node.js, TailwindCSS, C#, JavaScript, Python, SQL, XML, and Kotlin.
       - Contact Details: Email is khristianangelo.tiu@gmail.com.
     `;
 

@@ -24,10 +24,29 @@ export const PROJECTS = [
     ],
     tags: ["React", "Next.js", "Node.js", "PostgreSQL"], 
     link: "https://tech-sync-remastered.vercel.app/",
-    github: "https://github.com/khristianangelo18/TechSync-Remastered",
+    github: "https://github.com/khristianangelo18/TechSync",
     isCapstone: true,
     status: "Live",
     team: "2-Person Team"
+  },
+  { 
+    title: "Athlete Pulse", 
+    subtitle: "Workout & Nutrition Tracking Web & Mobile App",
+    description: "High-performance fitness and macro nutrition progressive web application featuring custom workout routine splits, live exercise logging, and local data persistence.", 
+    overview: "Engineered Athlete Pulse, a modern fitness and nutrition tracking web and mobile application built with React Native and Expo. Developed to give athletes full control over training splits, volume progression, and daily macronutrient targets, featuring interactive exercise logging, automated workout receipt generation, and a 100% private local-first storage architecture.",
+    features: [
+      "Custom routine and split builder with targeted muscle groups, volume, and rep goals",
+      "Real-time active workout logger with set completion tracking and dynamic volume tallying",
+      "Daily energy and macro nutrition dashboard (Calories, Protein, Carbs, Fat) with visual target gauges",
+      "Shareable workout receipt summary generator rendered with automated canvas export",
+      "Local-first privacy architecture with complete JSON data backup and restore capabilities"
+    ],
+    tags: ["React Native", "Expo", "JavaScript", "TailwindCSS"], 
+    link: "https://athlete-pulse-app.vercel.app/",
+    github: "https://github.com/khristianangelo18/fitness-app",
+    isCapstone: false,
+    status: "Live",
+    team: "Solo Developer"
   },
   { 
     title: "3Whites", 
@@ -51,8 +70,8 @@ export const PROJECTS = [
 
 export const SKILLS = {
   languages: ["JavaScript", "Python", "C++", "C#", "Java", "SQL", "HTML5", "CSS3", "XML", "Kotlin", "PHP"],
-  frameworks: ["Next.js", "React", "Node.js", "TailwindCSS"],
-  tools: ["GitHub", "Google Cloud", "VS Code", "Figma", "Supabase", "Android Studio", "Postman", "PostgreSQL", "Vite", "Jira", "AGILE", "Scrum", "Vercel"]
+  frameworks: ["Next.js", "React", "React Native", "Node.js", "TailwindCSS"],
+  tools: ["GitHub", "Google Cloud", "VS Code", "Figma", "Supabase", "Android Studio", "Postman", "PostgreSQL", "Vite", "Jira", "AGILE", "Scrum", "Vercel", "Expo"]
 };
 
 export const SKILL_ICONS = {
@@ -69,6 +88,7 @@ export const SKILL_ICONS = {
   "PHP": { source: 'simple', slug: 'php' },
   "Next.js": { source: 'simple', slug: 'nextdotjs', invertInDarkMode: true },
   "React": { source: 'simple', slug: 'react' },
+  "React Native": { source: 'simple', slug: 'react' },
   "Node.js": { source: 'simple', slug: 'nodedotjs' },
   "TailwindCSS": { source: 'simple', slug: 'tailwindcss' },
   "GitHub": { source: 'simple', slug: 'github', invertInDarkMode: true },
@@ -83,7 +103,8 @@ export const SKILL_ICONS = {
   "Jira": { source: 'simple', slug: 'jira' },
   "Scrum": { source: 'local', slug: 'scrum', invertInDarkMode: true },
   "AGILE": { source: 'local', slug: 'agile', invertInDarkMode: true },
-  "Vercel": { source: 'simple', slug: 'vercel', invertInDarkMode: true }
+  "Vercel": { source: 'simple', slug: 'vercel', invertInDarkMode: true },
+  "Expo": { source: 'simple', slug: 'expo', invertInDarkMode: true }
 };
 
 export const EDUCATION = [

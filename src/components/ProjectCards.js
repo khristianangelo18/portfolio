@@ -72,21 +72,21 @@ export function ProjectBadges({ team, status, isCapstone = false }) {
 
 export function ProjectLinks({ link, github, size = 'md' }) {
   const isExternalLink = link && link !== 'javascript:void(0)' && link !== '#';
-  const hasGithub = !!github;
+  const hasGithub = !!(github && github !== '#' && github !== 'javascript:void(0)');
   const pad = size === 'lg' ? 'px-4 py-2.5' : 'px-3 py-1.5';
 
   if (!isExternalLink && !hasGithub) return null;
 
   return (
-    <div className="flex flex-wrap gap-2.5" onClick={(e) => e.stopPropagation()}>
+    <div className="relative z-10 flex flex-wrap gap-2" onClick={(e) => e.stopPropagation()}>
       {isExternalLink && (
-        <a href={link} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 ${pad} bg-white dark:bg-slate-100 border border-slate-300 dark:border-slate-800 text-slate-900 font-extrabold rounded text-xs transition-all hover:bg-slate-50 dark:hover:bg-white shadow-xs`}>
+        <a href={link} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-1.5 ${pad} bg-white dark:bg-slate-100 border border-slate-300 dark:border-slate-800 text-slate-900 font-extrabold rounded text-xs transition-all hover:bg-slate-50 dark:hover:bg-white shadow-xs`}>
           <span>visit project</span>
           <ExternalLink className="w-3.5 h-3.5 text-blue-600 dark:text-slate-900" />
         </a>
       )}
       {hasGithub && (
-        <a href={github} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 ${pad} bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-900 dark:text-slate-300 font-extrabold rounded text-xs transition-all shadow-xs`}>
+        <a href={github} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-1.5 ${pad} bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-900 dark:text-slate-300 font-extrabold rounded text-xs transition-all shadow-xs`}>
           <Github className="w-3.5 h-3.5" />
           <span>source code</span>
           <ExternalLink className="w-3 h-3 text-slate-500 dark:text-slate-400" />
@@ -167,7 +167,9 @@ export function FeaturedProjectCard(project) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
-  const hasLinks = (link && link !== 'javascript:void(0)' && link !== '#');
+  const isExternalLink = link && link !== 'javascript:void(0)' && link !== '#';
+  const hasGithub = !!(github && github !== '#' && github !== 'javascript:void(0)');
+  const hasLinks = isExternalLink || hasGithub;
 
   const cyanColors = ['#22d3ee', '#38bdf8', '#0284c7'];
   const cyanGlow = '190 90 60';
@@ -207,11 +209,19 @@ export function FeaturedProjectCard(project) {
             </div>
           </div>
 
-          <div className="px-5 sm:px-6 pb-5 pt-3 border-t border-slate-200/80 dark:border-slate-900 flex items-center justify-between gap-4">
-            <div>{hasLinks ? <ProjectLinks link={link} github={github} /> : <span className="text-[11px] font-mono text-slate-500 font-bold">Mobile App</span>}</div>
-            <span className="flex items-center gap-1 text-xs font-mono text-slate-700 dark:text-slate-400 group-hover:text-slate-950 dark:group-hover:text-slate-200 transition-colors font-bold">
-              details <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-blue-600 dark:text-cyan-400" />
-            </span>
+          <div className="px-5 sm:px-6 pb-5 pt-3 border-t border-slate-200/80 dark:border-slate-900 flex flex-col gap-3">
+            <div>
+              {hasLinks ? (
+                <ProjectLinks link={link} github={github} />
+              ) : (
+                <span className="text-[11px] font-mono text-slate-500 font-bold">In Development</span>
+              )}
+            </div>
+            <div className="flex items-center">
+              <span className="flex items-center gap-1 text-xs font-mono text-slate-700 dark:text-slate-400 group-hover:text-slate-950 dark:group-hover:text-slate-200 transition-colors font-bold">
+                details <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-blue-600 dark:text-cyan-400" />
+              </span>
+            </div>
           </div>
         </div>
       </BorderGlow>
