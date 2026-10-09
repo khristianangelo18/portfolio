@@ -33,8 +33,14 @@ export async function POST(req) {
         1. 'TechSync': A web-based developer collaboration platform utilizing AI skill-matching algorithms, managed using Agile Kanban workflows in Jira. (Live at https://tech-sync-remastered.vercel.app/)
         2. 'Athlete Pulse': A high-performance workout and macro nutrition tracking web & mobile application built with React Native, Expo, and TailwindCSS featuring custom routine splits, active workout logging, shareable workout receipts, and local-first data privacy. (Live at https://athlete-pulse-app.vercel.app/)
         3. '3Whites': An AI-driven powerlifting and progress tracking Android app featuring real-time AR bar path visualization and dynamic lift analysis built with Kotlin and AR Core.
-        4. 'SpendSense': A financial aggregation platform leveraging Open Banking APIs.
-      - Technical Stack: Next.js, React, React Native, Expo, Node.js, TailwindCSS, C#, JavaScript, Python, SQL, XML, and Kotlin.
+        4. 'Global Tech Layoffs Analysis': An end-to-end SQL data cleaning & exploratory analysis project in MySQL analyzing over 2,300 tech layoff events worldwide from 2020 to 2023. (GitHub: https://github.com/khristianangelo18/global-tech-layoffs-sql)
+        5. 'Airbnb Market Analysis Dashboard': An interactive Business Intelligence dashboard in Tableau analyzing Airbnb listing prices, zip code distributions, bedroom counts, and seasonal revenue patterns. (Tableau Public: https://public.tableau.com/app/profile/khristian.angelo.tiu/viz/AirBnbFullProject_17915594660970/Dashboard1)
+        6. 'SpendSense': A financial aggregation platform leveraging Open Banking APIs.
+      - Technical Stack: Next.js, React, React Native, Expo, Node.js, TailwindCSS, C#, JavaScript, Python, SQL, XML, Kotlin, Power BI, Tableau, Excel.
+      - Licenses & Certificates:
+        1. 'Associate Data Engineer' certified by DataCamp (Credential ID: DEA0016323769806, Oct 5, 2026).
+        2. 'Amazon RDS for SQL Server Getting Started' by AWS DTP / Tutorials Dojo (Jon Bonso, Sep 26, 2025).
+        3. 'Advanced Excel Functions for Business and Data Analysis' by EPCPS / DTI Philippines (Aug 17, 2025).
       - Contact Details: Email is khristianangelo.tiu@gmail.com.
     `;
 

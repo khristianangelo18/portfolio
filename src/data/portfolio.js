@@ -66,12 +66,49 @@ export const PROJECTS = [
     status: "Completed",
     team: "Mobile App"
   },
+  { 
+    title: "Global Tech Layoffs Analysis", 
+    subtitle: "End-to-End SQL Data Cleaning & Exploratory Data Analysis",
+    description: "End-to-end MySQL data analytics project executing complex data cleaning, staging architectures, window functions, and exploratory analysis across 2,300+ global layoff events.", 
+    overview: "Engineered an end-to-end SQL data pipeline utilizing MySQL to clean, standardize, and analyze over 2,300 tech layoff records across 2020–2023. Applied multi-phase staging tables, composite-key deduplication with ROW_NUMBER() and CTEs, categorical normalization, and exploratory analytics leveraging DENSE_RANK() and rolling aggregations to uncover workforce impact trends across industries, funding stages, and global economies.",
+    features: [
+      "Staging database architecture with non-destructive transformations preserving raw source datasets",
+      "Composite duplicate detection and removal utilizing ROW_NUMBER() window functions and Common Table Expressions",
+      "Comprehensive data normalization converting text dates into native SQL DATE formats and standardizing categorical labels",
+      "Exploratory Data Analysis utilizing DENSE_RANK() and rolling window sums (SUM() OVER) for time-series trend analysis"
+    ],
+    tags: ["MySQL", "SQL", "Data Cleaning", "EDA", "Database Design"], 
+    link: "",
+    github: "https://github.com/khristianangelo18/global-tech-layoffs-sql",
+    isCapstone: false,
+    status: "Completed",
+    team: "Solo Project"
+  },
+  { 
+    title: "Airbnb Market Analysis Dashboard", 
+    subtitle: "Interactive Tableau Market & Revenue Intelligence Dashboard",
+    description: "Interactive Tableau Business Intelligence dashboard analyzing Airbnb listing prices, zip code distributions, bedroom capacities, and seasonal revenue patterns.", 
+    overview: "Designed and engineered an interactive Business Intelligence dashboard in Tableau analyzing real-world Airbnb listing data. Features multi-dimensional visualizations including geographic pricing maps by zip code, bedroom-to-price variations, and annual revenue trajectories to extract actionable market insights.",
+    features: [
+      "Interactive geographic map visualizing average Airbnb listing prices across target zip codes",
+      "Bedroom capacity breakdown analyzing pricing trends from single bedrooms to multi-room listings",
+      "Year-over-year revenue and pricing time-series analysis evaluating seasonal demand fluctuations",
+      "Dynamic dashboard filtering enabling multi-dimensional data exploration and cross-visual filtering"
+    ],
+    tags: ["Tableau", "Data Visualization", "Business Intelligence", "Analytics"], 
+    link: "https://public.tableau.com/app/profile/khristian.angelo.tiu/viz/AirBnbFullProject_17915594660970/Dashboard1",
+    image: "/images/airbnb-tableau-dashboard.png",
+    github: "",
+    isCapstone: false,
+    status: "Live",
+    team: "Solo Project"
+  },
 ];
 
 export const SKILLS = {
   languages: ["JavaScript", "Python", "C++", "C#", "Java", "SQL", "HTML5", "CSS3", "XML", "Kotlin", "PHP"],
   frameworks: ["Next.js", "React", "React Native", "Node.js", "TailwindCSS"],
-  tools: ["GitHub", "Google Cloud", "VS Code", "Figma", "Supabase", "Android Studio", "Postman", "PostgreSQL", "Vite", "Jira", "AGILE", "Scrum", "Vercel", "Expo"]
+  tools: ["GitHub", "Google Cloud", "VS Code", "Figma", "Supabase", "Android Studio", "Postman", "PostgreSQL", "Vite", "Jira", "AGILE", "Scrum", "Vercel", "Expo", "Power BI", "Tableau", "Excel"]
 };
 
 export const SKILL_ICONS = {
@@ -104,8 +141,56 @@ export const SKILL_ICONS = {
   "Scrum": { source: 'local', slug: 'scrum', invertInDarkMode: true },
   "AGILE": { source: 'local', slug: 'agile', invertInDarkMode: true },
   "Vercel": { source: 'simple', slug: 'vercel', invertInDarkMode: true },
-  "Expo": { source: 'simple', slug: 'expo', invertInDarkMode: true }
+  "Expo": { source: 'simple', slug: 'expo', invertInDarkMode: true },
+  "Power BI": { source: 'local', slug: 'powerbi' },
+  "powerBI": { source: 'local', slug: 'powerbi' },
+  "PowerBI": { source: 'local', slug: 'powerbi' },
+  "Tableau": { source: 'local', slug: 'tableau' },
+  "tableau": { source: 'local', slug: 'tableau' },
+  "Excel": { source: 'local', slug: 'excel' },
+  "excel": { source: 'local', slug: 'excel' }
 };
+
+export const CERTIFICATES = [
+  {
+    title: "Associate Data Engineer",
+    issuer: "DataCamp",
+    issueDate: "October 5, 2026",
+    credentialId: "DEA0016323769806",
+    image: "/certificates/datacamp-associate-data-engineer.png",
+    fileUrl: "/certificates/datacamp-associate-data-engineer.pdf",
+    skills: ["Data Engineering", "SQL", "Data Pipelines", "Data Management"],
+    description: "Certified as an Associate Data Engineer by DataCamp, verifying core competencies in data engineering architecture, pipeline construction, SQL query design, and data platform management.",
+    badge: "Entry Level Certification",
+    accent: "from-emerald-500/20 to-teal-400/10"
+  },
+  {
+    title: "Amazon RDS for SQL Server Getting Started",
+    issuer: "AWS DTP • Tutorials Dojo",
+    instructor: "Jon Bonso",
+    issueDate: "September 26, 2025",
+    credentialId: "AWS DTP Course",
+    image: "/certificates/aws-rds-sql-server.png",
+    fileUrl: "/certificates/aws-rds-sql-server.pdf",
+    skills: ["Amazon RDS", "SQL Server", "Cloud Databases", "AWS"],
+    description: "Successfully completed the AWS DTP curriculum covering deployment, configuration, maintenance, and high-availability operations for Microsoft SQL Server on Amazon RDS.",
+    badge: "Cloud Database Accreditation",
+    accent: "from-amber-500/20 to-orange-400/10"
+  },
+  {
+    title: "Advanced Excel Functions for Business and Data Analysis",
+    issuer: "EPCPS • DTI Philippines",
+    authority: "Ms. Ethel Grace Verana (CEO) & Mr. Alejandro V. Matute Jr. MSIT",
+    issueDate: "August 17, 2025",
+    credentialId: "Certificate of Participation",
+    image: "/certificates/advanced-excel-functions.png",
+    fileUrl: "/certificates/advanced-excel-functions.png",
+    skills: ["Microsoft Excel", "Business Analysis", "Data Modeling", "Functions & Formulas"],
+    description: "Completed intensive training in advanced spreadsheet engineering, financial functions, business analytics modeling, and data-driven reporting.",
+    badge: "Analytics Training",
+    accent: "from-blue-500/20 to-indigo-400/10"
+  }
+];
 
 export const EDUCATION = [
   {

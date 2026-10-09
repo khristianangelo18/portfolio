@@ -71,6 +71,10 @@ export default function Navbar({ setShowHeroAnimations, theme, toggleTheme }) {
             Projects
             <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-blue-500 group-hover:w-full transition-all duration-300"></span>
           </a>
+          <a href="#certificates" onClick={(e) => handleScroll(e, 'certificates')} className="hover:text-zinc-950 dark:hover:text-white transition-colors relative group">
+            Certificates
+            <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-blue-500 group-hover:w-full transition-all duration-300"></span>
+          </a>
           <a href="#contact" onClick={(e) => handleScroll(e, 'contact')} className="hover:text-zinc-950 dark:hover:text-white transition-colors relative group">
             Contact
             <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-blue-500 group-hover:w-full transition-all duration-300"></span>
@@ -136,6 +140,9 @@ export default function Navbar({ setShowHeroAnimations, theme, toggleTheme }) {
           </a>
           <a href="#projects" onClick={(e) => handleScroll(e, 'projects')} className="hover:text-zinc-950 dark:hover:text-white transition-colors">
             Projects
+          </a>
+          <a href="#certificates" onClick={(e) => handleScroll(e, 'certificates')} className="hover:text-zinc-950 dark:hover:text-white transition-colors">
+            Certificates
           </a>
           <a href="#contact" onClick={(e) => handleScroll(e, 'contact')} className="hover:text-zinc-950 dark:hover:text-white transition-colors">
             Contact

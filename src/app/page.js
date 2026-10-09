@@ -18,10 +18,11 @@ import Plasma from '@/components/Plasma/Plasma';
 import LogoLoop from '@/components/LogoLoop/LogoLoop';
 import Navbar from '@/components/Navbar';
 import { FeaturedProjectCard } from '@/components/ProjectCards';
+import CertificateCard from '@/components/CertificateCard';
 
 import { 
   PROJECTS, SKILLS, SKILL_ICONS, EDUCATION, 
-  WORK_EXPERIENCE, INTERESTS, LEADERSHIP 
+  WORK_EXPERIENCE, INTERESTS, LEADERSHIP, CERTIFICATES 
 } from '@/data/portfolio';
 
 const handleAnimationComplete = () => {
@@ -215,8 +216,8 @@ export default function LandingPage() {
     }
   };
 
-  const getSkillIconUrl = ({ source, slug }) => {
-    if (source === 'local') return `/images/${slug}.png`;
+  const getSkillIconUrl = ({ source, slug, ext }) => {
+    if (source === 'local') return `/images/${slug}.${ext || 'png'}`;
     if (source === 'devicon') {
       const variant = slug === 'csharp' ? 'plain' : 'original';
       return `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${slug}/${slug}-${variant}.svg`;
@@ -807,6 +808,32 @@ export default function LandingPage() {
             </div>
           </section>
 
+          {/* CERTIFICATES */}
+          <section id="certificates" className="py-32 border-t border-slate-300 dark:border-slate-900">
+            <div className="space-y-16">
+              <Reveal className="space-y-4">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 text-xs font-mono uppercase tracking-[0.18em] text-slate-700 dark:text-slate-300">
+                  <Award className="w-3.5 h-3.5 text-amber-500" />
+                  Verified Credentials
+                </div>
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-950 dark:text-white">
+                  Licenses & <span className="text-slate-500">Certificates</span>
+                </h2>
+                <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl">
+                  Accredited credentials and hands-on technical certifications validating expertise in data engineering, cloud databases, and business analytics.
+                </p>
+              </Reveal>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+                {CERTIFICATES.map((cert) => (
+                  <Reveal key={cert.title} className="h-full">
+                    <CertificateCard certificate={cert} theme={theme} />
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          </section>
+
           {/* CONTACT FORM */}
           <section id="contact" className="pt-32 pb-12 border-t border-slate-300 dark:border-slate-900">
             <Reveal as="div" className="max-w-6xl mx-auto">
@@ -992,6 +1019,7 @@ export default function LandingPage() {
                   <a href="#" className="text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white transition-colors">Home</a>
                   <a href="#about" className="text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white transition-colors">About</a>
                   <a href="#projects" className="text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white transition-colors">Projects</a>
+                  <a href="#certificates" className="text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white transition-colors">Certificates</a>
                   <a href="#contact" className="text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white transition-colors">Contact</a>
                 </div>
               </div>
