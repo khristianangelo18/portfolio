@@ -10,7 +10,6 @@ import {
   Code2, Layers, Wrench, Filter 
 } from 'lucide-react';
 
-import SplitText from "@/components/SplitText";
 import BorderGlow from '@/components/BorderGlow/BorderGlow';
 import PortfolioChatbot from '@/components/PortfolioChatbot';
 import TiltedCard from '@/components/TiltedCard/TiltedCard';
@@ -24,10 +23,6 @@ import {
   PROJECTS, SKILLS, SKILL_ICONS, EDUCATION, 
   WORK_EXPERIENCE, INTERESTS, LEADERSHIP, CERTIFICATES 
 } from '@/data/portfolio';
-
-const handleAnimationComplete = () => {
-  console.log('All letters have animated!');
-};
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name is required (min 2 chars)"),
@@ -89,9 +84,7 @@ export default function LandingPage() {
   const [currentRole, setCurrentRole] = useState('');
   const [roleIndex, setRoleIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [showHeroAnimations, setShowHeroAnimations] = useState(false);
-  const [loadingProgress, setLoadingProgress] = useState(0);
   const [activeSkillFilter, setActiveSkillFilter] = useState('all');
   const [theme, setTheme] = useState('dark');
   
@@ -137,34 +130,10 @@ export default function LandingPage() {
   }, []);
 
   useEffect(() => {
-    const duration = 4500;
-    const interval = 20;
-    const steps = duration / interval;
-    const increment = 100 / steps;
-    let currentProgress = 0;
-
-    const progressTimer = setInterval(() => {
-      currentProgress += increment;
-      if (currentProgress >= 100) {
-        currentProgress = 100;
-        clearInterval(progressTimer);
-      }
-      setLoadingProgress(Math.floor(currentProgress));
-    }, interval);
-
-    const loadingTimer = setTimeout(() => {
-      setIsLoading(false);
-    }, 4500);
-
-    const heroTimer = setTimeout(() => {
+    const frame = requestAnimationFrame(() => {
       setShowHeroAnimations(true);
-    }, 4600);
-
-    return () => {
-      clearInterval(progressTimer);
-      clearTimeout(loadingTimer);
-      clearTimeout(heroTimer);
-    };
+    });
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
@@ -226,14 +195,21 @@ export default function LandingPage() {
   };
 
   const technicalStackLogos = useMemo(() => {
-    return Object.entries(SKILL_ICONS).map(([name, iconConfig]) => {
+    const seen = new Set();
+    const uniqueLogos = [];
+
+    for (const [name, iconConfig] of Object.entries(SKILL_ICONS)) {
+      const key = `${iconConfig.source}-${iconConfig.slug}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+
       const darkModeHoverClass = iconConfig.invertInDarkMode
         ? 'group-hover:brightness-0 group-hover:invert group-hover:opacity-100'
         : 'group-hover:filter-none group-hover:opacity-100';
 
       const lightModeHoverClass = 'group-hover:filter-none group-hover:opacity-100';
 
-      return {
+      uniqueLogos.push({
         node: (
           <div className="group relative flex items-center justify-center p-1 cursor-pointer">
             <img
@@ -248,8 +224,10 @@ export default function LandingPage() {
           </div>
         ),
         title: name,
-      };
-    });
+      });
+    }
+
+    return uniqueLogos;
   }, [theme]);
 
   const getSkillInitials = (name) => {
@@ -303,60 +281,7 @@ export default function LandingPage() {
         />
       </div>
 
-      {isLoading && (
-        <div className="fixed inset-0 z-[100] bg-[#030712] flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0 opacity-30 bg-gradient-to-br from-slate-900 via-indigo-950 to-[#030712]"></div>
-
-          <div className="relative text-center space-y-12 w-full max-w-5xl px-6 sm:px-8">
-            <div className="relative flex flex-col items-center justify-center">
-              <div className="w-full text-center space-y-6">
-                <SplitText
-                  text="Welcome to My Portfolio!"
-                  className="theme-loading-title text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white dark:text-white"
-                  delay={50}
-                  duration={1.25}
-                  ease="power3.out"
-                  splitType="chars"
-                  from={{ opacity: 0, y: 40 }}
-                  to={{ opacity: 1, y: 0 }}
-                  threshold={0.1}
-                  rootMargin="-100px"
-                  textAlign="center"
-                  onLetterAnimationComplete={handleAnimationComplete}
-                  showCallback
-                />
-              </div>
-            </div>
-            
-            <div className="space-y-4 max-w-xl mx-auto">
-              <div className="relative">
-                <div className="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800 shadow-inner">
-                  <div 
-                    className="h-full bg-gradient-to-r from-slate-700 via-cyan-500 to-indigo-500 rounded-full transition-all duration-300 ease-out relative overflow-hidden"
-                    style={{ width: `${loadingProgress}%` }}
-                  >
-                    <div 
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                      style={{ animation: 'shimmer 1.5s ease-in-out infinite' }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center justify-between gap-2 text-sm sm:text-base">
-                <span className="text-slate-400 font-mono tracking-wide">
-                  Initializing experience...
-                </span>
-                <span className="text-slate-100 dark:text-white font-mono font-bold text-lg tabular-nums">
-                  {loadingProgress}%
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className={`transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
+      <div>
         <div 
           className="fixed inset-0 opacity-20 pointer-events-none transition-all duration-300"
           style={{
@@ -371,27 +296,27 @@ export default function LandingPage() {
           <section className="flex flex-col items-center justify-center min-h-screen pt-24 pb-12 relative overflow-hidden">
             <div className="w-full grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
               <div className="space-y-6 max-w-4xl">
-                <div className={`inline-flex items-center gap-2 px-4 py-2 bg-slate-900/90 dark:bg-slate-900/90 border border-slate-700/60 rounded-full text-slate-300 dark:text-slate-300 text-sm backdrop-blur-md shadow-lg ${showHeroAnimations ? 'animate-fade-in' : 'opacity-0'}`}>
+                <div className={`inline-flex items-center gap-2 px-4 py-2 bg-slate-900/90 dark:bg-slate-900/90 border border-slate-700/60 rounded-full text-slate-300 dark:text-slate-300 text-sm backdrop-blur-md shadow-lg transition-all duration-700 ease-out ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
                   <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse shadow-[0_0_8px_#22d3ee]" />
                   Available for new projects & opportunities. Let's connect!
                 </div>
 
                 <div className="space-y-2">
                   <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-none break-words">
-                    <div className={`transition-all duration-1200 ease-out ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+                    <div className={`transition-all duration-1000 delay-100 ease-out ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
                       <span className="bg-gradient-to-r from-slate-900 via-slate-700 to-slate-950 dark:from-white dark:via-slate-200 dark:to-slate-400 bg-clip-text text-transparent">
                         KHRISTIAN
                       </span>
                     </div>
 
-                    <div className={`transition-all duration-1200 ease-out ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+                    <div className={`transition-all duration-1000 delay-200 ease-out ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
                       <span className="bg-gradient-to-r from-slate-700 via-slate-500 to-slate-800 dark:from-slate-300 dark:via-slate-500 dark:to-slate-700 bg-clip-text text-transparent">
                         ANGELO
                       </span>
                     </div>
                   </h1>
                   
-                  <div className={`h-[42px] flex items-center transition-all duration-1200 ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                  <div className={`h-[42px] flex items-center transition-all duration-1000 delay-300 ease-out ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                     <span className="px-4 py-2 bg-slate-900/90 border border-slate-800 rounded-lg text-sm font-mono text-slate-300 backdrop-blur-md flex items-center gap-2 shadow-inner">
                       {currentRole}
                       <span className="inline-block w-[2px] h-4 bg-cyan-400 animate-pulse"></span>
@@ -399,13 +324,13 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                <p className={`text-lg md:text-xl text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl transition-all duration-1200 ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                <p className={`text-lg md:text-xl text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl transition-all duration-1000 delay-500 ease-out ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                   I craft <span className="text-slate-900 dark:text-slate-100 font-semibold">exceptional digital experiences</span> by 
                   combining technical expertise with strategic thinking. Specializing in scalable full-stack 
                   architecture and seamless project execution.
                 </p>
 
-                <div className={`flex flex-wrap gap-4 pt-4 transition-all duration-1200 ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                <div className={`flex flex-wrap gap-4 pt-4 transition-all duration-1000 delay-700 ease-out ${showHeroAnimations ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                   <a 
                     href="#projects" 
                     className="group relative px-8 py-4 bg-slate-900 border border-slate-700 hover:border-slate-500 rounded-lg font-semibold text-white transition-all duration-300 flex items-center gap-2 overflow-hidden cursor-pointer shadow-xl"
@@ -417,52 +342,54 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              <TiltedCard
-                showTooltip={false}
-                scaleOnHover={1.03}
-                rotateAmplitude={10}
-                containerClassName="w-full max-w-xl mx-auto lg:mx-0"
-              >
-                <div className="developer-card w-full rounded-2xl overflow-hidden border border-slate-800 shadow-2xl bg-[#0b1120] text-left transition-all duration-300">
-                  {/* window chrome */}
-                  <div className="developer-card-header flex items-center gap-2 px-4 py-3 bg-[#11182b] border-b border-slate-800">
-                    <div className="flex gap-2">
-                      <span className="w-3 h-3 rounded-full bg-red-500" />
-                      <span className="w-3 h-3 rounded-full bg-yellow-400" />
-                      <span className="w-3 h-3 rounded-full bg-green-500" />
+              <div className={`w-full max-w-xl mx-auto lg:mx-0 transition-all duration-1000 delay-300 ease-out ${showHeroAnimations ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'}`}>
+                <TiltedCard
+                  showTooltip={false}
+                  scaleOnHover={1.03}
+                  rotateAmplitude={10}
+                  containerClassName="w-full max-w-xl mx-auto lg:mx-0"
+                >
+                  <div className="developer-card w-full rounded-2xl overflow-hidden border border-slate-800 shadow-2xl bg-[#0b1120] text-left transition-all duration-300">
+                    {/* window chrome */}
+                    <div className="developer-card-header flex items-center gap-2 px-4 py-3 bg-[#11182b] border-b border-slate-800">
+                      <div className="flex gap-2">
+                        <span className="w-3 h-3 rounded-full bg-red-500" />
+                        <span className="w-3 h-3 rounded-full bg-yellow-400" />
+                        <span className="w-3 h-3 rounded-full bg-green-500" />
+                      </div>
+                      <div className="flex-1 flex justify-end">
+                        <span className="developer-pill px-3 py-1 rounded-md bg-slate-950/60 text-slate-400 text-xs font-mono flex items-center gap-1.5 transition-colors duration-300">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />                          developer.js
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex-1 flex justify-end">
-                      <span className="developer-pill px-3 py-1 rounded-md bg-slate-950/60 text-slate-400 text-xs font-mono flex items-center gap-1.5 transition-colors duration-300">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />                          developer.js
-                      </span>
-                    </div>
-                  </div>
 
-                  {/* code body */}
-                  <div className="p-6 sm:p-8 font-mono text-xs sm:text-sm md:text-base leading-relaxed overflow-x-auto">
-                    <p><span className="text-purple-400">const</span> <span className="text-cyan-300">Developer</span> <span className="text-slate-500">=</span> <span className="text-slate-500">{'{'}</span></p>
-                    <p className="pl-4 sm:pl-6"><span className="text-sky-300">name</span><span className="text-slate-500">:</span> <span className="text-emerald-400">"Khristian Angelo Tiu"</span><span className="text-slate-500">,</span></p>
-                    <p className="pl-4 sm:pl-6">
-                      <span className="text-sky-300">role</span><span className="text-slate-500">:</span>{' '}
-                      <span className="text-emerald-400">"Software Engineer, Project Manager, Full Stack Developer, Quality Assurance Engineer"</span><span className="text-slate-500">,</span>
-                    </p>
-                    <p className="pl-4 sm:pl-6"><span className="text-sky-300">location</span><span className="text-slate-500">:</span> <span className="text-emerald-400">"Manila, Philippines"</span><span className="text-slate-500">,</span></p>
-                    <p className="pl-4 sm:pl-6">
-                      <span className="text-sky-300">skills</span><span className="text-slate-500">:</span>{' '}
-                      <span className="text-slate-500">[</span>
-                      <span className="text-emerald-400">"React"</span><span className="text-slate-500">, </span>
-                      <span className="text-emerald-400">"Next.js"</span><span className="text-slate-500">, </span>
-                      <span className="text-emerald-400">"Node.js"</span>
-                      <span className="text-slate-500">],</span>
-                    </p>
-                    <p className="pl-4 sm:pl-6"><span className="text-sky-300">availableForWork</span><span className="text-slate-500">:</span> <span className="text-orange-400">true</span></p>
-                    <p><span className="text-slate-500">{'}'}</span><span className="text-slate-500">;</span></p>
+                    {/* code body */}
+                    <div className="p-6 sm:p-8 font-mono text-xs sm:text-sm md:text-base leading-relaxed overflow-x-auto">
+                      <p><span className="text-purple-400">const</span> <span className="text-cyan-300">Developer</span> <span className="text-slate-500">=</span> <span className="text-slate-500">{'{'}</span></p>
+                      <p className="pl-4 sm:pl-6"><span className="text-sky-300">name</span><span className="text-slate-500">:</span> <span className="text-emerald-400">"Khristian Angelo Tiu"</span><span className="text-slate-500">,</span></p>
+                      <p className="pl-4 sm:pl-6">
+                        <span className="text-sky-300">role</span><span className="text-slate-500">:</span>{' '}
+                        <span className="text-emerald-400">"Data Engineer, Software Engineer, Project Manager, Quality Assurance Engineer"</span><span className="text-slate-500">,</span>
+                      </p>
+                      <p className="pl-4 sm:pl-6"><span className="text-sky-300">location</span><span className="text-slate-500">:</span> <span className="text-emerald-400">"Manila, Philippines"</span><span className="text-slate-500">,</span></p>
+                      <p className="pl-4 sm:pl-6">
+                        <span className="text-sky-300">skills</span><span className="text-slate-500">:</span>{' '}
+                        <span className="text-slate-500">[</span>
+                        <span className="text-emerald-400">"React"</span><span className="text-slate-500">, </span>
+                        <span className="text-emerald-400">"Next.js"</span><span className="text-slate-500">, </span>
+                        <span className="text-emerald-400">"Node.js"</span>
+                        <span className="text-slate-500">],</span>
+                      </p>
+                      <p className="pl-4 sm:pl-6"><span className="text-sky-300">availableForWork</span><span className="text-slate-500">:</span> <span className="text-orange-400">true</span></p>
+                      <p><span className="text-slate-500">{'}'}</span><span className="text-slate-500">;</span></p>
+                    </div>
                   </div>
-                </div>
-              </TiltedCard>
+                </TiltedCard>
+              </div>
             </div>
 
-            <div className={`mt-16 sm:mt-0 sm:absolute sm:bottom-4 sm:left-1/2 sm:-translate-x-1/2 flex flex-col items-center gap-2 animate-bounce transition-opacity duration-500 ${showHeroAnimations ? 'opacity-100' : 'opacity-0'}`}>
+            <div className={`mt-16 sm:mt-0 sm:absolute sm:bottom-4 sm:left-1/2 sm:-translate-x-1/2 flex flex-col items-center gap-2 animate-bounce transition-opacity duration-700 delay-1000 ${showHeroAnimations ? 'opacity-100' : 'opacity-0'}`}>
               <span className="text-xs text-slate-500 font-mono">SCROLL</span>
               <div className="w-[1px] h-12 bg-gradient-to-b from-slate-500 to-transparent" />
             </div>

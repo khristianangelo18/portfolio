@@ -35,7 +35,8 @@ export async function POST(req) {
         3. '3Whites': An AI-driven powerlifting and progress tracking Android app featuring real-time AR bar path visualization and dynamic lift analysis built with Kotlin and AR Core.
         4. 'Global Tech Layoffs Analysis': An end-to-end SQL data cleaning & exploratory analysis project in MySQL analyzing over 2,300 tech layoff events worldwide from 2020 to 2023. (GitHub: https://github.com/khristianangelo18/global-tech-layoffs-sql)
         5. 'Airbnb Market Analysis Dashboard': An interactive Business Intelligence dashboard in Tableau analyzing Airbnb listing prices, zip code distributions, bedroom counts, and seasonal revenue patterns. (Tableau Public: https://public.tableau.com/app/profile/khristian.angelo.tiu/viz/AirBnbFullProject_17915594660970/Dashboard1)
-        6. 'SpendSense': A financial aggregation platform leveraging Open Banking APIs.
+        6. 'Data Professional Survey Breakdown': An interactive Business Intelligence dashboard built in Power BI analyzing survey responses from global data professionals across salary benchmarks, favorite programming languages, industry entry difficulty, and happiness gauges for work-life balance and salary.
+        7. 'SpendSense': A financial aggregation platform leveraging Open Banking APIs.
       - Technical Stack: Next.js, React, React Native, Expo, Node.js, TailwindCSS, C#, JavaScript, Python, SQL, XML, Kotlin, Power BI, Tableau, Excel.
       - Licenses & Certificates:
         1. 'Associate Data Engineer' certified by DataCamp (Credential ID: DEA0016323769806, Oct 5, 2026).

@@ -103,6 +103,26 @@ export const PROJECTS = [
     status: "Live",
     team: "Solo Project"
   },
+  { 
+    title: "Data Professional Survey Breakdown", 
+    subtitle: "Interactive Power BI Career & Compensation Intelligence Dashboard",
+    description: "Interactive Power BI Business Intelligence dashboard analyzing survey responses from data professionals worldwide across salary ranges, favorite programming languages, industry entry difficulty, and workplace satisfaction.", 
+    overview: "Designed and engineered an interactive Business Intelligence dashboard in Power BI analyzing survey data from global data professionals. Features multi-dimensional visualizations including salary benchmarks across job titles, programming language preferences, industry entry difficulty sentiment, and satisfaction gauges evaluating work-life balance and compensation.",
+    features: [
+      "Job role salary benchmarking evaluating average compensation across Data Analysts, Scientists, and Engineers",
+      "Technology adoption analysis tracking favorite programming languages (Python, SQL, R) segmented by role",
+      "Perceived barrier-to-entry sentiment analysis evaluating the difficulty of breaking into data careers",
+      "Dual satisfaction gauges measuring respondent happiness across salary and work/life balance metrics",
+      "Global respondent demographic treemap visualizing geographic distribution across countries"
+    ],
+    tags: ["Power BI", "DAX", "Data Analytics", "Business Intelligence", "Data Visualization"], 
+    link: "https://app.powerbi.com/groups/me/reports/9fb61209-789a-4c66-9de3-35edd8e7388a/802ef902ee78ce0698cb?experience=power-bi",
+    image: "/images/powerbi-survey-dashboard.png",
+    github: "",
+    isCapstone: false,
+    status: "Live",
+    team: "Solo Project"
+  },
 ];
 
 export const SKILLS = {
@@ -143,12 +163,8 @@ export const SKILL_ICONS = {
   "Vercel": { source: 'simple', slug: 'vercel', invertInDarkMode: true },
   "Expo": { source: 'simple', slug: 'expo', invertInDarkMode: true },
   "Power BI": { source: 'local', slug: 'powerbi' },
-  "powerBI": { source: 'local', slug: 'powerbi' },
-  "PowerBI": { source: 'local', slug: 'powerbi' },
   "Tableau": { source: 'local', slug: 'tableau' },
-  "tableau": { source: 'local', slug: 'tableau' },
-  "Excel": { source: 'local', slug: 'excel' },
-  "excel": { source: 'local', slug: 'excel' }
+  "Excel": { source: 'local', slug: 'excel' }
 };
 
 export const CERTIFICATES = [
