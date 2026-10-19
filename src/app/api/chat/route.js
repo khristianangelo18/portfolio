@@ -39,9 +39,10 @@ export async function POST(req) {
         7. 'SpendSense': A financial aggregation platform leveraging Open Banking APIs.
       - Technical Stack: Next.js, React, React Native, Expo, Node.js, TailwindCSS, C#, JavaScript, Python, SQL, XML, Kotlin, Power BI, Tableau, Excel.
       - Licenses & Certificates:
-        1. 'Associate Data Engineer' certified by DataCamp (Credential ID: DEA0016323769806, Oct 5, 2026).
-        2. 'Amazon RDS for SQL Server Getting Started' by AWS DTP / Tutorials Dojo (Jon Bonso, Sep 26, 2025).
-        3. 'Advanced Excel Functions for Business and Data Analysis' by EPCPS / DTI Philippines (Aug 17, 2025).
+        1. 'Associate Data Analyst' certified by DataCamp (Credential ID: DAA0013839619360, Oct 19, 2026).
+        2. 'Associate Data Engineer' certified by DataCamp (Credential ID: DEA0016323769806, Oct 5, 2026).
+        3. 'Amazon RDS for SQL Server Getting Started' by AWS DTP / Tutorials Dojo (Jon Bonso, Sep 26, 2025).
+        4. 'Advanced Excel Functions for Business and Data Analysis' by EPCPS / DTI Philippines (Aug 17, 2025).
       - Contact Details: Email is khristianangelo.tiu@gmail.com.
     `;
 

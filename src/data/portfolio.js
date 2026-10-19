@@ -169,6 +169,18 @@ export const SKILL_ICONS = {
 
 export const CERTIFICATES = [
   {
+    title: "Associate Data Analyst",
+    issuer: "DataCamp",
+    issueDate: "October 19, 2026",
+    credentialId: "DAA0013839619360",
+    image: "/certificates/datacamp-associate-data-analyst.png",
+    fileUrl: "https://www.datacamp.com/certificate/DAA0013839619360",
+    skills: ["Data Management", "Exploratory Analysis", "Statistical Experimentation", "Communication and Visualization", "SQL"],
+    description: "Certified as a Data Analyst Associate by DataCamp, verifying core competencies in data cleaning and transformation, exploratory data analysis, statistical experimentation, and reporting and data visualization.",
+    badge: "Associate Level Certification",
+    accent: "from-blue-500/20 to-cyan-400/10"
+  },
+  {
     title: "Associate Data Engineer",
     issuer: "DataCamp",
     issueDate: "October 5, 2026",
@@ -177,7 +189,7 @@ export const CERTIFICATES = [
     fileUrl: "/certificates/datacamp-associate-data-engineer.pdf",
     skills: ["Data Engineering", "SQL", "Data Pipelines", "Data Management"],
     description: "Certified as an Associate Data Engineer by DataCamp, verifying core competencies in data engineering architecture, pipeline construction, SQL query design, and data platform management.",
-    badge: "Entry Level Certification",
+    badge: "Associate Level Certification",
     accent: "from-emerald-500/20 to-teal-400/10"
   },
   {

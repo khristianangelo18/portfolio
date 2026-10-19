@@ -370,7 +370,7 @@ export default function LandingPage() {
                       <p className="pl-4 sm:pl-6"><span className="text-sky-300">name</span><span className="text-slate-500">:</span> <span className="text-emerald-400">"Khristian Angelo Tiu"</span><span className="text-slate-500">,</span></p>
                       <p className="pl-4 sm:pl-6">
                         <span className="text-sky-300">role</span><span className="text-slate-500">:</span>{' '}
-                        <span className="text-emerald-400">"Data Engineer, Software Engineer, Project Manager, Quality Assurance Engineer"</span><span className="text-slate-500">,</span>
+                        <span className="text-emerald-400">"Data Engineer, Data Analyst, Software Engineer, Project Manager, Quality Assurance Engineer"</span><span className="text-slate-500">,</span>
                       </p>
                       <p className="pl-4 sm:pl-6"><span className="text-sky-300">location</span><span className="text-slate-500">:</span> <span className="text-emerald-400">"Manila, Philippines"</span><span className="text-slate-500">,</span></p>
                       <p className="pl-4 sm:pl-6">
